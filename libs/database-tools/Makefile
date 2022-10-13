@@ -20,7 +20,7 @@ flake8:
 	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} flake8 --max-line-length 120
 
 mypy:
-	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} mypy .
+	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} mypy . --ignore-missing-imports
 
 bandit:
 	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} bandit .
@@ -31,7 +31,7 @@ check-integration:
 	${DOCKER_COMPOSE_RUN} ${TEST_VOLUME} ${PROJECT_SERVICE} sh -c "/wait && ${TEST_CMD} ${TEST_FOLDER}/integration"
 
 shell:
-	${DOCKER_COMPOSE_RUN} database_tools sh -c "/wait && python"
+	${DOCKER_COMPOSE_RUN} ${PROJECT_SERVICE} sh -c "/wait && python"
 
 stop:
 	docker-compose down --remove-orphans

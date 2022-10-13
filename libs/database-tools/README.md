@@ -30,7 +30,19 @@ make stop
 
 ## How to test locally
 
-The following command will build the docker image, lint the files and test its functionalities:
+Lint files (flake8, mypy and bandit):
+
+```sh
+make lint
+```
+
+Test functionalities:
+
+```sh
+make tests
+```
+
+Alternatively, the following is an all-in-one command to build, lint and test:
 
 ```sh
 make all
