@@ -18,6 +18,6 @@ class Provider(Spotify):
 @lru_cache
 def get_provider() -> Provider:
     return Provider(
-        os.environ.get("CLIENT_ID", ""),
-        os.environ.get("CLIENT_SECRET", "")
+        os.environ.get("MEDIA_TOOLS_CLIENT_ID", ""),
+        os.environ.get("MEDIA_TOOLS_CLIENT_SECRET", "")
     )
