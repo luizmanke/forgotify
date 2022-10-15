@@ -39,7 +39,7 @@ make lint
 Test functionalities:
 
 ```sh
-make tests
+make test
 ```
 
 Alternatively, the following is an all-in-one command to build, lint and test:

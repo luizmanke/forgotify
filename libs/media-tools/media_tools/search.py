@@ -22,7 +22,7 @@ def get_artists(query: str) -> List[Artist]:
 
     offset = 0
     artists = []
-    while True:
+    for offset in range(0, MAX_OFFSET, MAX_ITEMS_PER_REQUEST):
         logger.debug(f"Requesting offset {offset}.")
 
         response = provider.search(query, type="artist", limit=MAX_ITEMS_PER_REQUEST, offset=offset)
@@ -35,8 +35,7 @@ def get_artists(query: str) -> List[Artist]:
                 popularity=item["popularity"]
             ))
 
-        offset += MAX_ITEMS_PER_REQUEST
-        if offset >= min(response["artists"]["total"], MAX_OFFSET):
+        if len(artists) >= response["artists"]["total"]:
             break
 
     return artists

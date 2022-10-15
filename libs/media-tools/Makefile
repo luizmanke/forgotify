@@ -1,34 +1,19 @@
-PROJECT_NAME := media-tools
-
-PWD := $(shell pwd)
-
-TEST_FOLDER := tests
-TEST_VOLUME := -v ${PWD}/${TEST_FOLDER}:/app/${TEST_FOLDER}
-TEST_CMD := pytest -v
-
-DOCKER_RUN := docker run --rm
+include ../../tools/Docker.mk
+include ../../tools/Lint.mk
+include ../../tools/Poetry.mk
+include ../../tools/Test.mk
 
 
-all: build lint tests
+all: build lint test clean
 
-build:
-	docker build -t ${PROJECT_NAME} .
+lock: poetry-lock
 
-flake8:
-	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} flake8 --max-line-length 120
+build: lock docker-build
 
-mypy:
-	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} mypy . --ignore-missing-imports
+lint: lint-flake8 lint-mypy lint-bandit
 
-bandit:
-	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} bandit .
+test: test-unit
 
-lint: flake8 mypy bandit
+shell: docker-shell
 
-check:
-	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} ${TEST_CMD} ${TEST_FOLDER}/unit
-
-shell:
-	${DOCKER_RUN} -it ${PROJECT_NAME} python
-
-tests: check
+clean: docker-images-remove

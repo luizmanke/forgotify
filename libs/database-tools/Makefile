@@ -1,39 +1,21 @@
-PROJECT_NAME := database-tools
-PROJECT_SERVICE := database_tools
-
-PWD := $(shell pwd)
-
-TEST_FOLDER := tests
-TEST_VOLUME := -v ${PWD}/${TEST_FOLDER}:/app/${TEST_FOLDER}
-TEST_CMD := pytest -v
-
-DOCKER_RUN := docker run --rm
-DOCKER_COMPOSE_RUN := docker-compose run --rm
+include ../../tools/Docker.mk
+include ../../tools/Lint.mk
+include ../../tools/Poetry.mk
+include ../../tools/Test.mk
 
 
-all: build lint tests
+all: build lint test
 
-build:
-	docker build -t ${PROJECT_NAME} .
+lock: poetry-lock
 
-flake8:
-	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} flake8 --max-line-length 120
+build: lock docker-build
 
-mypy:
-	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} mypy . --ignore-missing-imports
+lint: lint-flake8 lint-mypy lint-bandit
 
-bandit:
-	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} bandit .
+test: test-integration
 
-lint: flake8 mypy bandit
+shell: docker-compose-shell
 
-check-integration:
-	${DOCKER_COMPOSE_RUN} ${TEST_VOLUME} ${PROJECT_SERVICE} sh -c "/wait && ${TEST_CMD} ${TEST_FOLDER}/integration"
+stop: docker-compose-stop
 
-shell:
-	${DOCKER_COMPOSE_RUN} ${PROJECT_SERVICE} sh -c "/wait && python"
-
-stop:
-	docker-compose down --remove-orphans
-
-tests: check-integration
+clean: docker-containers-stop docker-containers-remove docker-images-remove
