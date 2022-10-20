@@ -1,0 +1,16 @@
+name: CI Test
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Echo
+        run: echo "Hello World!"
