@@ -10,15 +10,6 @@ from batch_database_update.main import Session
 
 
 @pytest.fixture
-def set_postgres_env_vars(monkeypatch):
-    monkeypatch.setenv("POSTGRES_HOST", "postgres")
-    monkeypatch.setenv("POSTGRES_PORT", "5432")
-    monkeypatch.setenv("POSTGRES_USERNAME", "user")
-    monkeypatch.setenv("POSTGRES_PASSWORD", "password")
-    monkeypatch.setenv("POSTGRES_DATABASE", "database")
-
-
-@pytest.fixture
 def set_ascii_uppercase_return(monkeypatch):
     monkeypatch.setattr("batch_database_update.main.string.ascii_uppercase", "A")
 
@@ -89,9 +80,8 @@ def search_with_some_results(monkeypatch):
 
 
 def test_run_with_no_results(
-    set_postgres_env_vars,
-    set_ascii_uppercase_return,
     session,
+    set_ascii_uppercase_return,
     search_with_no_results
 ):
     assert session.count(models.Artist) == 0
@@ -100,9 +90,8 @@ def test_run_with_no_results(
 
 
 def test_run_with_some_results(
-    set_postgres_env_vars,
-    set_ascii_uppercase_return,
     session,
+    set_ascii_uppercase_return,
     search_with_some_results,
     clear_table
 ):
@@ -112,10 +101,9 @@ def test_run_with_some_results(
 
 
 def test_run_with_some_results_and_database_has_data(
-    set_postgres_env_vars,
-    set_ascii_uppercase_return,
     session,
     populate_table,
+    set_ascii_uppercase_return,
     search_with_some_results
 ):
     assert session.count(models.Artist) == 10
