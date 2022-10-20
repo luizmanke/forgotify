@@ -18,6 +18,11 @@ def set_postgres_env_vars(monkeypatch):
     monkeypatch.setenv("POSTGRES_DATABASE", "database")
 
 
+@pytest.fixture
+def set_ascii_uppercase_return(monkeypatch):
+    monkeypatch.setattr("batch_database_update.main.string.ascii_uppercase", "A")
+
+
 @pytest.fixture(scope="session")
 def session():
     return Session(
@@ -90,6 +95,7 @@ def search_with_some_results(monkeypatch):
 
 def test_run_with_no_results(
     set_postgres_env_vars,
+    set_ascii_uppercase_return,
     session,
     create_table,
     search_with_no_results
@@ -101,6 +107,7 @@ def test_run_with_no_results(
 
 def test_run_with_some_results(
     set_postgres_env_vars,
+    set_ascii_uppercase_return,
     session,
     create_table,
     search_with_some_results,
@@ -113,6 +120,7 @@ def test_run_with_some_results(
 
 def test_run_with_some_results_and_database_has_data(
     set_postgres_env_vars,
+    set_ascii_uppercase_return,
     session,
     populate_table,
     search_with_some_results
