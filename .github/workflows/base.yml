@@ -35,5 +35,5 @@ jobs:
 
       - name: Build
         run: |
-          echo libs/database-tools
+          cd libs/database-tools
           make build
