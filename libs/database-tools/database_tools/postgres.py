@@ -1,8 +1,9 @@
-from typing import Any, List
+from typing import Any, List, Optional
 
 from sqlalchemy import create_engine
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.elements import BinaryExpression
 
 
 class ItemIsNotPersistedError(Exception):
@@ -45,15 +46,14 @@ class Session:
     def update(self, item: Any):
         self._session.commit()
 
-    def search(self, table: Any) -> List[Any]:
-        return (
-            self._session
-            .query(table)
-            .all()
-        )
+    def search(self, table: Any, condition: Optional[BinaryExpression] = None) -> List[Any]:
+        results = self._session.query(table)
+        if condition is not None:
+            results = results.filter(condition)
+        return results.all()
 
-    def count(self, table: Any) -> int:
-        items = self.search(table)
+    def count(self, table: Any, condition: Optional[BinaryExpression] = None) -> int:
+        items = self.search(table, condition)
         return len(items)
 
     def delete(self, item: Any):
