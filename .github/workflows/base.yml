@@ -1,10 +1,8 @@
 name: CI Test
 
 on:
-  push:
-    paths:
-      - libs/**
-    branches-ignore:
+  pull_request:
+    branches:
       - main
 
 jobs:
