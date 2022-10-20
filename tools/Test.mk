@@ -14,7 +14,8 @@ DOCKER_COMPOSE_RUN := docker-compose run --rm
 test-unit:
 	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} ${TEST_CMD} ${TEST_FOLDER}/unit
 
-
 test-integration:
+	${DOCKER_COMPOSE_RUN} ${TEST_VOLUME} ${PROJECT_SERVICE} sh -c "${TEST_CMD} ${TEST_FOLDER}/integration"
+
+test-integration-wait:
 	${DOCKER_COMPOSE_RUN} ${TEST_VOLUME} ${PROJECT_SERVICE} sh -c "/wait && ${TEST_CMD} ${TEST_FOLDER}/integration"
-	docker-compose down --remove-orphans

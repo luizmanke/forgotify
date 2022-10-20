@@ -30,7 +30,7 @@ class MockProvider:
 @pytest.fixture
 def search_with_no_results(monkeypatch):
     monkeypatch.setattr(
-        "media_tools.search.get_provider",
+        "media_tools.utils.get_provider",
         lambda: MockProvider(total_samples=0)
     )
 
@@ -38,7 +38,7 @@ def search_with_no_results(monkeypatch):
 @pytest.fixture
 def search_with_some_results(monkeypatch):
     monkeypatch.setattr(
-        "media_tools.search.get_provider",
+        "media_tools.utils.get_provider",
         lambda: MockProvider(total_samples=500)
     )
 
@@ -46,7 +46,7 @@ def search_with_some_results(monkeypatch):
 @pytest.fixture
 def search_with_too_many_results(monkeypatch):
     monkeypatch.setattr(
-        "media_tools.search.get_provider",
+        "media_tools.utils.get_provider",
         lambda: MockProvider(total_samples=10_000)
     )
 

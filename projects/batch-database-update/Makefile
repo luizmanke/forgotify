@@ -1,3 +1,4 @@
+include ../../tools/Alembic.mk
 include ../../tools/Docker.mk
 include ../../tools/Lint.mk
 include ../../tools/Poetry.mk
@@ -12,9 +13,11 @@ build: lock docker-build
 
 lint: lint-flake8 lint-mypy lint-bandit
 
-test: test-integration-wait docker-compose-stop
+migrations-revision: alembic-revision docker-compose-stop
 
-shell: docker-compose-shell-wait docker-compose-stop
+test: alembic-apply test-integration docker-compose-stop
+
+shell: alembic-apply docker-compose-shell docker-compose-stop
 
 stop: docker-compose-stop
 

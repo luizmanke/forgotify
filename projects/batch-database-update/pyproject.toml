@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "batch-database-update"
+version = "0.1.0"
+description = ""
+authors = ["Luiz Felipe Manke <luizmanke@gmail.com>"]
+readme = "README.md"
+packages = [{include = "batch_database_update"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+psycopg2 = "^2.9.3"
+SQLAlchemy = "^1.4.41"
+database-tools = { path = "../../libs/database-tools" }
+media-tools = { path = "../../libs/media-tools" }
+
+[tool.poetry.group.dev.dependencies]
+alembic = "^1.8.1"
+bandit = "^1.7.4"
+flake8 = "^5.0.4"
+mypy = "^0.971"
+pytest = "^7.1.3"
+sqlalchemy-stubs = "^0.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

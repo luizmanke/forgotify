@@ -4,7 +4,7 @@ include ../../tools/Poetry.mk
 include ../../tools/Test.mk
 
 
-all: build lint test clean
+all: build lint test
 
 lock: poetry-lock
 

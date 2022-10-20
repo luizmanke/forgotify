@@ -21,6 +21,9 @@ docker-shell:
 	${DOCKER_RUN} -it ${PROJECT_NAME} python
 
 docker-compose-shell:
+	${DOCKER_COMPOSE_RUN} ${PROJECT_SERVICE} sh -c "python"
+
+docker-compose-shell-wait:
 	${DOCKER_COMPOSE_RUN} ${PROJECT_SERVICE} sh -c "/wait && python"
 
 docker-compose-stop:
