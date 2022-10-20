@@ -1,9 +1,7 @@
-name: CI Test
+name: Libs - Database Tools
 
 on:
   pull_request:
-    paths:
-      - libs/**
 
 jobs:
 
@@ -12,5 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Echo
-        run: echo "Hello World!"
+      - uses: actions/checkout@v3
+
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            package:
+              - 'libs/database-tools/**'
+
+      - name: hello world
+        if: steps.filter.outputs.package == 'true'
+        run: echo "I have changed!"
