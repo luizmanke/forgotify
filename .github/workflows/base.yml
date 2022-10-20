@@ -5,20 +5,31 @@ on:
 
 jobs:
 
-  setup:
-    name: Setup
+  check-changes:
+    name: Check changes
     runs-on: ubuntu-latest
     steps:
 
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - uses: dorny/paths-filter@v2
+      - name: Check changes
+        uses: dorny/paths-filter@v2
         id: filter
         with:
           filters: |
             package:
               - 'libs/database-tools/**'
 
-      - name: hello world
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    if: ${{ needs.check-changes.outputs.package == 'true' }}
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build
         if: steps.filter.outputs.package == 'true'
-        run: echo "I have changed!"
+        run: echo "I am building!"
