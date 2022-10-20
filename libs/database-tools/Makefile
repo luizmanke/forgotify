@@ -12,9 +12,9 @@ build: lock docker-build
 
 lint: lint-flake8 lint-mypy lint-bandit
 
-test: test-integration
+test: test-integration-wait docker-compose-stop
 
-shell: docker-compose-shell
+shell: docker-compose-shell-wait docker-compose-stop
 
 stop: docker-compose-stop
 

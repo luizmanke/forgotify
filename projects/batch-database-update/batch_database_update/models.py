@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, Float, Integer, String
+from sqlalchemy import Column, DateTime, Float, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -12,5 +12,5 @@ class Artist(Base):  # type: ignore
     name = Column(String, nullable=False)
     n_followers = Column(Integer, nullable=False)
     popularity = Column(Float, nullable=False)
-    created_at = Column(Date, nullable=False)
-    updated_at = Column(Date, nullable=False)
+    created_at = Column(DateTime, nullable=False)
+    updated_at = Column(DateTime, nullable=False)

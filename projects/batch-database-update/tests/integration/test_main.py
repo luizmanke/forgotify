@@ -34,11 +34,6 @@ def session():
     )
 
 
-@pytest.fixture(scope="session")
-def create_table(session: Session):
-    models.Base.metadata.create_all(session._engine)
-
-
 def create_get_artists_results(n_samples: int) -> List[schemas.Artist]:
     artists = []
     for i in range(n_samples):
@@ -62,7 +57,7 @@ def clear_table(session: Session):
 
 
 @pytest.fixture
-def populate_table(session: Session, create_table, clear_table):
+def populate_table(session: Session, clear_table):
     for item in create_get_artists_results(n_samples=10):
         session._session.add(
             models.Artist(
@@ -97,7 +92,6 @@ def test_run_with_no_results(
     set_postgres_env_vars,
     set_ascii_uppercase_return,
     session,
-    create_table,
     search_with_no_results
 ):
     assert session.count(models.Artist) == 0
@@ -109,7 +103,6 @@ def test_run_with_some_results(
     set_postgres_env_vars,
     set_ascii_uppercase_return,
     session,
-    create_table,
     search_with_some_results,
     clear_table
 ):

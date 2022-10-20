@@ -41,3 +41,13 @@ Alternatively, the following is an all-in-one command to build, lint and test:
 ```sh
 make all
 ```
+
+## How to use migrations
+
+Create a new revision:
+
+```sh
+make migrations-revision
+```
+
+*Migrations are automatically applied when running tests or shell.*
