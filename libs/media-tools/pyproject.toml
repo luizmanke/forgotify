@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "media-tools"
+version = "0.1.0"
+description = ""
+authors = ["Luiz Felipe Manke <luizmanke@gmail.com>"]
+readme = "README.md"
+packages = [{include = "media_tools"}]
+
+[tool.poetry.dependencies]
+loguru = "^0.6.0"
+pydantic = "^1.10.2"
+python = "^3.9"
+spotipy = "^2.20.0"
+
+[tool.poetry.group.dev.dependencies]
+bandit = "^1.7.4"
+flake8 = "^5.0.4"
+mypy = "^0.971"
+pytest = "^7.1.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
