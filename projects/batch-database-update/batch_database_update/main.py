@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 
 from database_tools.postgres import Session
 from media_tools import search
@@ -11,11 +12,11 @@ def run():
     execution_time = datetime.utcnow()
 
     session = Session(
-        host="postgres",
-        port="5432",
-        username="user",
-        password="password",
-        database="database",
+        host=os.environ.get("POSTGRES_HOST"),
+        port=os.environ.get("POSTGRES_PORT"),
+        username=os.environ.get("POSTGRES_USERNAME"),
+        password=os.environ.get("POSTGRES_PASSWORD"),
+        database=os.environ.get("POSTGRES_DATABASE"),
     )
 
     for query in ["A"]:
