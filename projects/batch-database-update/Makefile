@@ -9,7 +9,7 @@ all: build lint test
 
 lock: poetry-lock
 
-build: lock docker-build
+build: docker-build
 
 lint: lint-flake8 lint-mypy lint-bandit
 
