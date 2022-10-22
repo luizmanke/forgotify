@@ -8,4 +8,4 @@ jobs:
   database_tools:
     uses: luizmanke/forgotify/.github/workflows/base-workflow.yml@ci/create-ci
     with:
-      package_path: projects/batch-database-update
+      package_path: libs/media-tools

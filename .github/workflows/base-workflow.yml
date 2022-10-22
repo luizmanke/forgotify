@@ -31,15 +31,13 @@ jobs:
             tr '\n' ',' |
             sed -e 's#,$##g'
           )
-          echo $PACKAGE_PATH
-          echo $DEPENDENCIES_PATH
           echo "folders=$PACKAGE_PATH,$DEPENDENCIES_PATH" >> $GITHUB_OUTPUT
 
       - name: Check changes
         id: check-changes
         uses: tj-actions/changed-files@v33
         with:
-          files: ${{ inputs.package_path }}/**,${{ steps.list_dependencies.outputs.folders }}
+          files: ${{ steps.list_dependencies.outputs.folders }}
           files_separator: ","
 
       - name: Build
