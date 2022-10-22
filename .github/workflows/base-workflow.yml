@@ -30,7 +30,7 @@ jobs:
         id: check-changes
         uses: tj-actions/changed-files@v33
         with:
-          files: projects/batch-database-update/**
+          files: grep -o '"\.\./.*"' projects/batch-database-update/pyproject.toml | sed -e 's#"##g' -e 's#\.\./##g' | tr '\n' ',' | sed -e 's#,$##g'
           separator: ","
 
       - name: Build
