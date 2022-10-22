@@ -1,4 +1,4 @@
-name: Libs - Database Tools
+name: Continuous Integration Base
 
 on:
   workflow_call:
