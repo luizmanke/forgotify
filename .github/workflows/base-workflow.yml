@@ -3,12 +3,7 @@ name: Libs - Database Tools
 on:
   workflow_call:
     inputs:
-
-      paths_to_be_watched:
-        required: true
-        type: string
-
-      path_to_the_package:
+      package_path:
         required: true
         type: string
 
@@ -29,20 +24,22 @@ jobs:
       - name: List dependencies
         id: list_dependencies
         run: |
-          ASD=$(
-            grep -o '"\.\./.*"' projects/batch-database-update/pyproject.toml |
+          PACKAGE_PATH=${{ inputs.package_path }}/**
+          DEPENDENCIES_PATH=$(
+            grep -o '"\.\./.*"' ${{ inputs.package_path }}/pyproject.toml |
             sed -e 's#"##g' -e 's#\.\./##g' -e 's#$#/**#g' |
             tr '\n' ',' |
             sed -e 's#,$##g'
           )
-          echo $ASD
-          echo "folders=$ASD" >> $GITHUB_OUTPUT
+          echo $PACKAGE_PATH
+          echo $DEPENDENCIES_PATH
+          echo "folders=$PACKAGE_PATH,$DEPENDENCIES_PATH" >> $GITHUB_OUTPUT
 
       - name: Check changes
         id: check-changes
         uses: tj-actions/changed-files@v33
         with:
-          files: ${{ steps.list_dependencies.outputs.folders }}
+          files: ${{ inputs.package_path }}/**,${{ steps.list_dependencies.outputs.folders }}
           files_separator: ","
 
       - name: Build
