@@ -43,7 +43,7 @@ jobs:
         uses: tj-actions/changed-files@v33
         with:
           files: ${{ steps.list_dependencies.outputs.folders }}
-          separator: ","
+          files_separator: ","
 
       - name: Build
         run: |
