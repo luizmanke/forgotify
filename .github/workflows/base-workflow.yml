@@ -27,7 +27,7 @@ jobs:
           fetch-depth: 0
 
       - name: List dependencies
-        id: list_dependecies
+        id: list_dependencies
         run:
           echo "folders=123" >> $GITHUB_OUTPUT
 # echo "folders=$(
