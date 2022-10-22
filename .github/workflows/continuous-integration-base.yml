@@ -2,6 +2,7 @@ name: Continuous Integration Base
 
 on:
   workflow_call:
+
     inputs:
       package_path:
         required: true
@@ -13,7 +14,7 @@ jobs:
     name: Check changes
     runs-on: ubuntu-latest
     outputs:
-      has_changes: ${{ steps.filter.outputs.packages }}
+      has_changes: ${{ steps.check_changes.outputs.any_changed }}
     steps:
 
       - name: Checkout repository
@@ -34,39 +35,33 @@ jobs:
           echo "folders=$PACKAGE_PATH,$DEPENDENCIES_PATH" >> $GITHUB_OUTPUT
 
       - name: Check changes
-        id: check-changes
+        id: check_changes
         uses: tj-actions/changed-files@v33
         with:
           files: ${{ steps.list_dependencies.outputs.folders }}
           files_separator: ","
 
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [check_changes]
+    if: ${{ needs.check_changes.outputs.has_changes == 'true' }}
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.2.1
+          virtualenvs-create: false
+
       - name: Build
         run: |
-          echo ${{ steps.list_dependencies.outputs.folders }}
-          echo ${{ steps.check-changes.outputs.any_changed }}
-
-
-  # build:
-  #   name: Build
-  #   runs-on: ubuntu-latest
-  #   needs: [check_changes]
-  #   if: ${{ needs.check_changes.outputs.has_changes == 'true' }}
-  #   steps:
-
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
-
-  #     - uses: actions/setup-python@v4
-  #       with:
-  #         python-version: '3.9'
-
-  #     - name: Install Poetry
-  #       uses: snok/install-poetry@v1
-  #       with:
-  #         version: 1.2.1
-  #         virtualenvs-create: false
-
-  #     - name: Build
-  #       run: |
-  #         cd ${{ inputs.path_to_the_package }}
-  #         make build
+          cd ${{ inputs.package_path }}
+          make build
