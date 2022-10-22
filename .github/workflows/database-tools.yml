@@ -1,0 +1,11 @@
+name: Libs - Database Tools
+
+on:
+  pull_request:
+
+jobs:
+
+  asd:
+    uses: luizmanke/forgotify/.github/workflows/base-workflow.yml@ci/create-ci
+    with:
+      path_to_be_watched: libs/database-tools/**
