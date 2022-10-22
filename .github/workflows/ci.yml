@@ -3,22 +3,22 @@ name: CI
 on:
   pull_request:
 
-env:
+x-env: &x_env
   BASE_WORKFLOW: luizmanke/forgotify/.github/workflows/ci-base.yml@ci/create-ci
 
 jobs:
 
   libs_database_tools:
-    uses: ${{ env.BASE_WORKFLOW }}
+    uses: *x_env
     with:
       package_path: libs/database-tools
 
   libs_media_tools:
-    uses: ${{ env.BASE_WORKFLOW }}
+    uses: *x_env
     with:
       package_path: libs/media-tools
 
   projects_batch_database_update:
-    uses: ${{ env.BASE_WORKFLOW }}
+    uses: *x_env
     with:
       package_path: projects/batch-database-update
