@@ -25,10 +25,17 @@ jobs:
       - name: Build
         id: aaa
         run: |
-          echo ::set-output name=asd::$(grep -o '"\.\./.*"' ${{ inputs.path_to_the_package }}/pyproject.toml | sed -e 's#"##g' -e 's#\.\./##g' -e 's#^#- #g')
+          export DEPENDENCIES_PATH=$( \
+            grep -o '"\.\./.*"' ${{ inputs.path_to_the_package }}/pyproject.toml | \
+            sed -e 's#"##g' -e 's#\.\./##g' -e 's#^#- #g' \
+          )
+          echo ${DEPENDENCIES_PATH}
+# echo "" >> $GITHUB_OUTPUT
+# echo ::set-output name=asd::$(grep -o '"\.\./.*"' ${{ inputs.path_to_the_package }}/pyproject.toml | sed -e 's#"##g' -e 's#\.\./##g' -e 's#^#- #g')
 
       - name: Echo
-        run: ${{ steps.aaa.outputs.asd }}
+        run: |
+          echo ${{ steps.aaa.outputs.asd }}
 
   # check_changes:
   #   name: Check changes
