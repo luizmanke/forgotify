@@ -25,7 +25,7 @@ jobs:
         with:
           filters: |
             package:
-              - '{{ inputs.path_to_be_watched }}'
+              - {{ inputs.path_to_be_watched }}
 
   build:
     name: Build
