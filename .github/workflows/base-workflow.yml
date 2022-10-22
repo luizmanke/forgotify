@@ -23,9 +23,7 @@ jobs:
         uses: dorny/paths-filter@v2
         id: filter
         with:
-          filters: |
-            package:
-            ${{ inputs.path_to_be_watched }}
+          filters: ${{ inputs.path_to_be_watched }}
 
   build:
     name: Build
