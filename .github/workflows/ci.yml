@@ -3,19 +3,22 @@ name: CI
 on:
   pull_request:
 
+env:
+  BASE_WORKFLOW: luizmanke/forgotify/.github/workflows/ci-base.yml@ci/create-ci
+
 jobs:
 
   libs_database_tools:
-    uses: luizmanke/forgotify/.github/workflows/ci-base.yml@ci/create-ci
+    uses: $BASE_WORKFLOW
     with:
       package_path: libs/database-tools
 
   libs_media_tools:
-    uses: luizmanke/forgotify/.github/workflows/ci-base.yml@ci/create-ci
+    uses: $BASE_WORKFLOW
     with:
       package_path: libs/media-tools
 
   projects_batch_database_update:
-    uses: luizmanke/forgotify/.github/workflows/ci-base.yml@ci/create-ci
+    uses: $BASE_WORKFLOW
     with:
       package_path: projects/batch-database-update
