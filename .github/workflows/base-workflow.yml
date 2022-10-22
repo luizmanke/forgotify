@@ -27,8 +27,8 @@ jobs:
       - name: Check changes
         id: check-changes
         uses: tj-actions/changed-files@v33
-        files: libs/database-tools/**
         with:
+          files: libs/database-tools/**
           separator: ","
 
       - name: Build
