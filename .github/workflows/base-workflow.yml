@@ -26,15 +26,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: List dependencies
+        id: list_dependecies
+        run:
+          echo "folders=$(
+            grep -o '"\.\./.*"' projects/batch-database-update/pyproject.toml |
+            sed -e 's#"##g' -e 's#\.\./##g' |
+            tr '\n' ',' |
+            sed -e 's#,$##g'
+          )" >> $GITHUB_OUTPUT
+
       - name: Check changes
         id: check-changes
         uses: tj-actions/changed-files@v33
         with:
-          files: grep -o '"\.\./.*"' projects/batch-database-update/pyproject.toml | sed -e 's#"##g' -e 's#\.\./##g' | tr '\n' ',' | sed -e 's#,$##g'
+          files: ${{ steps.list_dependencies.outputs.folders }}
           separator: ","
 
       - name: Build
         run: |
+          echo ${{ steps.list_dependencies.outputs.folders }}
           echo ${{ steps.check-changes.outputs.any_changed }}
 
 
