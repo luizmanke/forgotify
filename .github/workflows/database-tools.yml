@@ -10,4 +10,4 @@ jobs:
     with:
       path_to_be_watched: |
         package:
-          - libs/database-tools/**
+          - tools/**
