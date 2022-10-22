@@ -29,6 +29,8 @@ jobs:
       - name: List dependencies
         id: list_dependencies
         run:
+          ASD=123
+          echo $ASD
           echo "folders=$(
             grep -o '"\.\./.*"' projects/batch-database-update/pyproject.toml |
             sed -e 's#"##g' -e 's#\.\./##g' -e 's#$#/**#g' |
