@@ -29,13 +29,12 @@ jobs:
       - name: List dependencies
         id: list_dependencies
         run:
-          echo "folders=123" >> $GITHUB_OUTPUT
-# echo "folders=$(
-#   grep -o '"\.\./.*"' projects/batch-database-update/pyproject.toml |
-#   sed -e 's#"##g' -e 's#\.\./##g' |
-#   tr '\n' ',' |
-#   sed -e 's#,$##g'
-# )" >> $GITHUB_OUTPUT
+          echo "folders=$(
+            grep -o '"\.\./.*"' projects/batch-database-update/pyproject.toml |
+            sed -e 's#"##g' -e 's#\.\./##g' |
+            tr '\n' ',' |
+            sed -e 's#,$##g'
+          )" >> $GITHUB_OUTPUT
 
       - name: Check changes
         id: check-changes
