@@ -14,32 +14,26 @@ on:
 
 jobs:
 
-  build:
-    name: Build
+  check_changes:
+    name: Check changes
     runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.filter.outputs.packages }}
     steps:
 
-      - name: Echo
-        run: |
-          echo ${{ inputs.paths_to_be_watched }}
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  # check_changes:
-  #   name: Check changes
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     has_changes: ${{ steps.filter.outputs.packages }}
-  #   steps:
-
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
-
-  #     - name: Check changes
-  #       uses: dorny/paths-filter@v2
-  #       id: filter
-  #       with:
-  #         filters: 
-  #           packages:
-  #             ${{ inputs.paths_to_be_watched }}
+      - name: Check changes
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: 
+            packages:
+              $(
+                grep -o '"\.\./.*"' projects/batch-database-update/pyproject.toml |
+                sed -e 's#"##g' -e 's#\.\./##g' -e 's/^/- /g'
+              )
 
   # build:
   #   name: Build
