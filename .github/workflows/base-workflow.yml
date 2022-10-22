@@ -31,7 +31,7 @@ jobs:
         run:
           echo "folders=$(
             grep -o '"\.\./.*"' projects/batch-database-update/pyproject.toml |
-            sed -e 's#"##g' -e 's#\.\./##g' |
+            sed -e 's#"##g' -e 's#\.\./##g' -e 's#$#/**#g' |
             tr '\n' ',' |
             sed -e 's#,$##g'
           )" >> $GITHUB_OUTPUT
