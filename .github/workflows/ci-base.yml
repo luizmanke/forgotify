@@ -63,9 +63,12 @@ jobs:
 
       - name: Build
         run: |
-          cd ${{ inputs.package_path }}
-# make build
+          make -C ${{ inputs.package_path }} build
 
       - name: Lint
         run: |
-          ls
+          make -C ${{ inputs.package_path }} lint
+
+      - name: Test
+        run: |
+          make -C ${{ inputs.package_path }} test
