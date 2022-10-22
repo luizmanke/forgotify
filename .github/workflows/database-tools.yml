@@ -9,5 +9,8 @@ jobs:
     uses: luizmanke/forgotify/.github/workflows/base-workflow.yml@ci/create-ci
     with:
       paths_to_be_watched: |
-        - projects/batch-database-update/**
+        $(
+          grep -o '"\.\./.*"' projects/batch-database-update/pyproject.toml |
+          sed -e 's#"##g' -e 's#\.\./##g' -e 's#^#- #g'
+        )
       path_to_the_package: projects/batch-database-update

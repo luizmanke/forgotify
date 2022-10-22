@@ -19,20 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Build
-        id: aaa
-        run: |
-          echo "dependencies_path=$(
-            grep -o '"\.\./.*"' ${{ inputs.path_to_the_package }}/pyproject.toml |
-            sed -e 's#"##g' -e 's#\.\./##g' -e 's#^#- #g'
-          )" >> $GITHUB_OUTPUT
-
       - name: Echo
         run: |
-          echo ${{ steps.aaa.outputs.dependencies_path }}
+          echo ${{ inputs.paths_to_be_watched }}
 
   # check_changes:
   #   name: Check changes
