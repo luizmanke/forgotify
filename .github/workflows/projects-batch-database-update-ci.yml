@@ -1,0 +1,11 @@
+name: Projects Batch Database Update CI
+
+on:
+  pull_request:
+
+jobs:
+
+  ci:
+    uses: luizmanke/forgotify/.github/workflows/base-ci.yml@ci/create-ci
+    with:
+      package_path: projects/batch-database-update
