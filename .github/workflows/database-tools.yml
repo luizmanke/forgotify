@@ -8,4 +8,4 @@ jobs:
   database_tools:
     uses: luizmanke/forgotify/.github/workflows/base-workflow.yml@ci/create-ci
     with:
-      path_to_be_watched: libs/database-tools/**
+      path_to_be_watched: '- libs/database-tools/**'
