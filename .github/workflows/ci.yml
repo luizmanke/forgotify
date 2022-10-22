@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+
+  libs_database_tools:
+    uses: luizmanke/forgotify/.github/workflows/ci-base.yml@ci/create-ci
+    with:
+      package_path: libs/database-tools
+
+  libs_media_tools:
+    uses: luizmanke/forgotify/.github/workflows/ci-base.yml@ci/create-ci
+    with:
+      package_path: libs/media-tools
+
+  projects_batch_database_update:
+    uses: luizmanke/forgotify/.github/workflows/ci-base.yml@ci/create-ci
+    with:
+      package_path: projects/batch-database-update
