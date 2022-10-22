@@ -30,7 +30,7 @@ jobs:
         id: check-changes
         uses: tj-actions/changed-files@v33
         with:
-          files: libs/database-tools/**
+          files: projects/batch-database-update/**
           separator: ","
 
       - name: Build
