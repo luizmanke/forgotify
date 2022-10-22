@@ -12,7 +12,7 @@ jobs:
         package_path: [
           libs/database-tools,
           libs/media-tools,
-          package/batch-database-update
+          projects/batch-database-update
         ]
 
     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@ci/create-ci
