@@ -3,49 +3,72 @@ name: Libs - Database Tools
 on:
   workflow_call:
     inputs:
-      path_to_be_watched:
+
+      paths_to_be_watched:
+        required: true
+        type: string
+
+      path_to_the_package:
         required: true
         type: string
 
 jobs:
 
-  check_changes:
-    name: Check changes
-    runs-on: ubuntu-latest
-    outputs:
-      has_changes: ${{ steps.filter.outputs.package }}
-    steps:
-
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Check changes
-        uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: ${{ inputs.path_to_be_watched }}
-
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [check_changes]
-    if: ${{ needs.check_changes.outputs.has_changes == 'true' }}
     steps:
 
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: 1.2.1
-          virtualenvs-create: false
-
       - name: Build
+        id: aaa
         run: |
-          cd libs/database-tools
-          make build
+          echo ::set-output name=asd::$(grep -o '"\.\./.*"' ${{ inputs.path_to_the_package }}/pyproject.toml | sed -e 's#"##g' -e 's#\.\./##g' -e 's#^#- #g')
+
+      - name: Echo
+        run: ${{ steps.aaa.outputs.asd }}
+
+  # check_changes:
+  #   name: Check changes
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     has_changes: ${{ steps.filter.outputs.packages }}
+  #   steps:
+
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+
+  #     - name: Check changes
+  #       uses: dorny/paths-filter@v2
+  #       id: filter
+  #       with:
+  #         filters: 
+  #           packages:
+  #             ${{ inputs.paths_to_be_watched }}
+
+  # build:
+  #   name: Build
+  #   runs-on: ubuntu-latest
+  #   needs: [check_changes]
+  #   if: ${{ needs.check_changes.outputs.has_changes == 'true' }}
+  #   steps:
+
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+
+  #     - uses: actions/setup-python@v4
+  #       with:
+  #         python-version: '3.9'
+
+  #     - name: Install Poetry
+  #       uses: snok/install-poetry@v1
+  #       with:
+  #         version: 1.2.1
+  #         virtualenvs-create: false
+
+  #     - name: Build
+  #       run: |
+  #         cd ${{ inputs.path_to_the_package }}
+  #         make build

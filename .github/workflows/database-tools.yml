@@ -8,6 +8,6 @@ jobs:
   database_tools:
     uses: luizmanke/forgotify/.github/workflows/base-workflow.yml@ci/create-ci
     with:
-      path_to_be_watched: |
-        package:
-          - tools/**
+      paths_to_be_watched: |
+        - package/batch-database-update/**
+      path_to_the_package: package/batch-database-update
