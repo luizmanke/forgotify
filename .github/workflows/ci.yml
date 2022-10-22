@@ -9,16 +9,16 @@ env:
 jobs:
 
   libs_database_tools:
-    uses: $BASE_WORKFLOW
+    uses: ${{ env.BASE_WORKFLOW }}
     with:
       package_path: libs/database-tools
 
   libs_media_tools:
-    uses: $BASE_WORKFLOW
+    uses: ${{ env.BASE_WORKFLOW }}
     with:
       package_path: libs/media-tools
 
   projects_batch_database_update:
-    uses: $BASE_WORKFLOW
+    uses: ${{ env.BASE_WORKFLOW }}
     with:
       package_path: projects/batch-database-update
