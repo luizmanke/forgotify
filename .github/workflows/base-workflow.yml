@@ -25,9 +25,9 @@ jobs:
       - name: Build
         id: aaa
         run: |
-          export DEPENDENCIES_PATH=$( \
-            grep -o '"\.\./.*"' ${{ inputs.path_to_the_package }}/pyproject.toml | \
-            sed -e 's#"##g' -e 's#\.\./##g' -e 's#^#- #g' \
+          export DEPENDENCIES_PATH=$(
+            grep -o '"\.\./.*"' ${{ inputs.path_to_the_package }}/pyproject.toml |
+            sed -e 's#"##g' -e 's#\.\./##g' -e 's#^#- #g'
           )
           echo ${DEPENDENCIES_PATH}
 # echo "" >> $GITHUB_OUTPUT
