@@ -50,4 +50,12 @@ Create a new revision:
 make migrations-revision
 ```
 
-*Migrations are automatically applied when running tests or shell.*
+> *Migrations are automatically applied to local databases when running tests or shell.*
+
+Update a remote database:
+
+*Note: Environment variables are required!*
+
+```sh
+make migrations-apply-remote
+```
