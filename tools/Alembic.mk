@@ -1,4 +1,5 @@
 PROJECT_DIR := $(shell pwd)
+PROJECT_NAME := $(shell basename ${PROJECT_DIR})
 
 DOCKER_RUN := docker run --rm
 
@@ -26,4 +27,4 @@ alembic-apply-remote: guard-POSTGRES_HOST guard-POSTGRES_PORT guard-POSTGRES_USE
 		-e POSTGRES_DATABASE \
 		-v ${PROJECT_DIR}/alembic.ini:/app/alembic.ini \
 		-v ${PROJECT_DIR}/migrations/:/app/migrations/ \
-			batch-database-update:latest sh -c "alembic upgrade heads"
+			${PROJECT_NAME} sh -c "alembic upgrade heads"
