@@ -23,20 +23,3 @@ sg_all_in_all_out = aws.ec2.SecurityGroup(
         )
     ]
 )
-
-rds_medias = aws.rds.Instance(
-    "medias",
-    allocated_storage=50,
-    backup_retention_period=7,
-    engine="postgres",
-    engine_version="14.2",
-    identifier="medias-qa",
-    instance_class="db.t3.micro",
-    db_name="medias",
-    port=5432,
-    username="username123456",
-    password="password123456",
-    publicly_accessible=True,
-    skip_final_snapshot=True,
-    vpc_security_group_ids=[sg_all_in_all_out.id]
-)

@@ -1,5 +1,5 @@
-name: databases-medias
-description: Databases Medias
+name: forgotify
+description: Forgotify Infra
 runtime:
     name: python
     options:

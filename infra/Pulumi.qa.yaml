@@ -1,0 +1,3 @@
+config:
+  forgotify:environment: qa
+  forgotify:password: password123456
