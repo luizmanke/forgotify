@@ -2,7 +2,7 @@ import pulumi
 import pulumi_aws as aws
 
 
-sg_all_in_all_out = aws.ec2.SecurityGroup(
+all_in_all_out = aws.ec2.SecurityGroup(
     "all-in-all-out",
     description="Allow all inbound and outbound traffic",
     name="all-in-all-out",
