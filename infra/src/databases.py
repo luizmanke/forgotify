@@ -6,7 +6,7 @@ from src import security_groups as sg
 
 config = pulumi.Config()
 environment = config.require("environment")
-password = config.require_secret("database_medias")
+medias_password = config.require_secret("database_medias_password")
 
 medias = aws.rds.Instance(
     "medias",
@@ -19,7 +19,7 @@ medias = aws.rds.Instance(
     db_name="medias",
     port=5432,
     username="master",
-    password=password,
+    password=medias_password,
     publicly_accessible=True,
     skip_final_snapshot=True,
     vpc_security_group_ids=[sg.all_in_all_out.id]

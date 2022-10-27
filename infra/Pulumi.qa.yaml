@@ -1,4 +1,0 @@
-config:
-  forgotify:environment: qa
-  forgotify:database_medias:
-    secure: AAABACk+7/KY/nSn6NAOuAZWsV4SZeOIYKHVociEE+tZIQXMkM4jv/a3Z++Y4tpV9gNYbQ==

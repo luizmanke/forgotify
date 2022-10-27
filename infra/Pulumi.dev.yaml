@@ -1,0 +1,4 @@
+config:
+  forgotify:environment: dev
+  forgotify:database_medias_password:
+    secure: AAABALJCT+6YGiECBZIAlN3cMZtcNMniJu06O3gruUhbn64X0HJC5Ub7MqXwqm6PSva2zw==
