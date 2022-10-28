@@ -13,6 +13,8 @@ build: docker-build
 
 lint: lint-flake8 lint-mypy lint-bandit
 
+migrations-apply-remote: alembic-apply-remote
+
 migrations-revision: alembic-revision docker-compose-stop
 
 test: alembic-apply test-integration docker-compose-stop

@@ -42,7 +42,7 @@ Alternatively, the following is an all-in-one command to build, lint and test:
 make all
 ```
 
-## How to use migrations
+## How to create migrations
 
 Create a new revision:
 
@@ -50,4 +50,28 @@ Create a new revision:
 make migrations-revision
 ```
 
-*Migrations are automatically applied when running tests or shell.*
+## How to apply migrations
+
+> *Migrations are automatically applied to local databases when running tests or shell.*
+
+Set the environment variables in a `.env` file:
+
+```sh
+POSTGRES_HOST=
+POSTGRES_PORT=
+POSTGRES_USERNAME=
+POSTGRES_PASSWORD=
+POSTGRES_DATABASE=
+```
+
+Export the environment variables:
+
+```sh
+export $(cat .env)
+```
+
+Apply migrations:
+
+```sh
+make migrations-apply-remote
+```

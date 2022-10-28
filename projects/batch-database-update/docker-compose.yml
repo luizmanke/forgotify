@@ -16,6 +16,11 @@ services:
     image: batch-database-update:latest
     environment:
       - WAIT_HOSTS=postgres:5432
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USERNAME=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DATABASE=database
     volumes:
       - ./alembic.ini:/app/alembic.ini
       - ./migrations/:/app/migrations/
