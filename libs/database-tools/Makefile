@@ -1,12 +1,9 @@
 include ../../makefiles/Docker.mk
 include ../../makefiles/Lint.mk
-include ../../makefiles/Poetry.mk
 include ../../makefiles/Test.mk
 
 
 all: build lint test
-
-lock: poetry-lock
 
 build: docker-build
 
