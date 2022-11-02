@@ -1,2 +1,2 @@
-from src import databases
-from src import security_groups
+from components import databases
+from components import security_groups

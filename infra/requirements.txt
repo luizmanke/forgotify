@@ -1,2 +1,2 @@
-pulumi=="^3.0.0"
-pulumi-aws=="^5.0.0"
+pulumi=="3.44.2"
+pulumi-aws=="5.19.0"

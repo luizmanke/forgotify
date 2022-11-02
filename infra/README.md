@@ -37,11 +37,11 @@ make list-stacks
 Update remote infrastructure:
 
 ```sh
-make update STACK=
+make up
 ```
 
-Remove remote infrastructure:
+Optionally, the stack and/or Pulumi flags can be passed as arguments:
 
 ```sh
-make destroy STACK=
+make up STACK=dev FLAGS="--skip-preview"
 ```
