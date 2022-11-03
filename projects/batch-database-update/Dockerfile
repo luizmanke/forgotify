@@ -25,5 +25,5 @@ RUN poetry install --no-root --no-interaction --no-ansi
 # Mount package
 COPY ${PROJECT_PATH}/batch_database_update/ batch_database_update/
 
-# Copy local libs
+# Remove local libs
 RUN rm -rf /libs
