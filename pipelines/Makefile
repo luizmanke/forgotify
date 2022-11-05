@@ -10,8 +10,6 @@ build:
 
 lint: lint-flake8 lint-mypy lint-bandit
 
-test: test-unit
-
 server:
 	${DOCKER_RUN} \
 		-e MEDIA_TOOLS_CLIENT_ID \
