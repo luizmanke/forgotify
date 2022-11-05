@@ -1,11 +1,13 @@
 from dagster import job, op
 
+from batch_database_update.main import run
+
 
 @op
-def get_number():
-    return 200
+def run_batch_database_update():
+    run()
 
 
 @job
 def batch_database_update():
-    get_number()
+    run_batch_database_update()
