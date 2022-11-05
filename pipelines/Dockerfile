@@ -33,3 +33,6 @@ RUN rm -rf /libs
 
 # Remove local projects
 RUN rm -rf /projects
+
+# Copy dagit workspace
+COPY ${PROJECT_PATH}/workspace.yaml ./
