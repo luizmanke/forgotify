@@ -7,10 +7,6 @@ ARG PROJECT_PATH
 
 WORKDIR /app
 
-# Install docker compose wait
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
-RUN chmod +x /wait
-
 # Install python requirements
 RUN pip install poetry \
     && poetry config virtualenvs.create false
