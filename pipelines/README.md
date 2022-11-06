@@ -38,6 +38,12 @@ Run the server:
 make server
 ```
 
+Optionally, run bash within the docker image:
+
+```sh
+make shell
+```
+
 ## How to test locally
 
 Build the docker image:
@@ -54,7 +60,7 @@ make lint
 
 Test functionalities:
 
-> Currently, test were not implemented since they would be redundant, given that the projects used within the pipelines have already been tested.
+> Currently, tests were not implemented since they would be redundant, given that the projects used within the pipelines have already been tested.
 
 ```sh
 make test

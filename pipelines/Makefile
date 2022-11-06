@@ -12,6 +12,8 @@ lint: lint-flake8 lint-mypy lint-bandit
 
 test: test-unit
 
+shell: docker-shell
+
 server:
 	${DOCKER_RUN} \
 		-e MEDIA_TOOLS_CLIENT_ID \
