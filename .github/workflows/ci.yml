@@ -5,6 +5,16 @@ on:
 
 jobs:
 
+  infra:
+    uses: luizmanke/forgotify/.github/workflows/ci-base.yml@main
+    with:
+      package_path: infra
+
+  pipelines:
+    uses: luizmanke/forgotify/.github/workflows/ci-base.yml@main
+    with:
+      package_path: pipelines
+
   libs_database_tools:
     uses: luizmanke/forgotify/.github/workflows/ci-base.yml@main
     with:
@@ -19,8 +29,3 @@ jobs:
     uses: luizmanke/forgotify/.github/workflows/ci-base.yml@main
     with:
       package_path: projects/batch-database-update
-
-  pipelines:
-    uses: luizmanke/forgotify/.github/workflows/ci-base.yml@main
-    with:
-      package_path: pipelines
