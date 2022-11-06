@@ -19,3 +19,8 @@ jobs:
     uses: luizmanke/forgotify/.github/workflows/ci-base.yml@main
     with:
       package_path: projects/batch-database-update
+
+  pipelines:
+    uses: luizmanke/forgotify/.github/workflows/ci-base.yml@main
+    with:
+      package_path: pipelines

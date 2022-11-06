@@ -2,11 +2,7 @@
 
 Pipelines is a project that aims to orchestrate the execution of jobs, such as a job that periodically populates a database.
 
-## Important Notes
-
-1. This project is powered by [Dagster](https://dagster.io/), which enables a serverless deployment to orchestrate jobs without spinning up any infrastructure.
-
-2. Tests were not implemented since they would be redundant, given that the projects used within the pipelines have already been tested.
+It is powered by [Dagster](https://dagster.io/), which enables a serverless deployment to orchestrate jobs without spinning up any infrastructure.
 
 ## How to run locally
 
@@ -42,7 +38,7 @@ Run the server:
 make server
 ```
 
-## How to lint locally
+## How to test locally
 
 Build the docker image:
 
@@ -56,7 +52,15 @@ Lint files (flake8, mypy and bandit):
 make lint
 ```
 
-Alternatively, the following is an all-in-one command to build and lint:
+Test functionalities:
+
+> Currently, test were not implemented since they would be redundant, given that the projects used within the pipelines have already been tested.
+
+```sh
+make test
+```
+
+Alternatively, the following is an all-in-one command to build, lint and test:
 
 ```sh
 make all
