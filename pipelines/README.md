@@ -42,13 +42,13 @@ Run the server:
 make server
 ```
 
-Optionally, remove the docker image:
+## How to lint locally
+
+Build the docker image:
 
 ```sh
-make clean
+make build
 ```
-
-## How to lint locally
 
 Lint files (flake8, mypy and bandit):
 
@@ -60,4 +60,12 @@ Alternatively, the following is an all-in-one command to build and lint:
 
 ```sh
 make all
+```
+
+## How to clean the workspace
+
+Remove the docker image:
+
+```sh
+make clean
 ```
