@@ -1,6 +1,4 @@
-REPO_DIR := $(shell cd ../../ && pwd)
 PROJECT_DIR := $(shell pwd)
-PROJECT_PATH := $(subst ${REPO_DIR}/,,${PROJECT_DIR})
 PROJECT_NAME := $(shell basename ${PROJECT_DIR})
 PROJECT_SERVICE := $(subst -,_,${PROJECT_NAME})
 
@@ -9,7 +7,10 @@ DOCKER_RUN := docker run --rm
 DOCKER_COMPOSE_RUN := docker-compose run --rm
 
 
+docker-build: CD=../../
 docker-build:
+	$(eval REPO_DIR := $(shell cd ${CD} && pwd))
+	$(eval PROJECT_PATH := $(subst ${REPO_DIR}/,,${PROJECT_DIR}))
 	cd ${REPO_DIR} && \
 	docker build \
 		-t ${PROJECT_NAME} \

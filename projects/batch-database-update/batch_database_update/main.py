@@ -2,6 +2,8 @@ from datetime import datetime
 import os
 import string
 
+from loguru import logger
+
 from database_tools.postgres import Session
 from media_tools import search
 
@@ -11,6 +13,7 @@ from batch_database_update import models
 def _get_and_update_artists(session: Session, execution_time: datetime):
 
     for query in list(string.ascii_uppercase):
+        logger.debug(f"Artist query: '{query}'.")
         artists = search.get_artists(query)
 
         for artist in artists:

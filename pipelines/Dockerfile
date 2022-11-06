@@ -18,12 +18,21 @@ RUN pip install poetry \
 # Copy local libs
 COPY libs/ /libs/
 
+# Copy local projects
+COPY projects/ /projects/
+
 # Install package dependencies
 COPY ${PROJECT_PATH}/poetry.lock ${PROJECT_PATH}/pyproject.toml ./
 RUN poetry install --no-root --no-interaction --no-ansi
 
 # Mount package
-COPY ${PROJECT_PATH}/batch_database_update/ batch_database_update/
+COPY ${PROJECT_PATH}/pipelines/ pipelines/
 
 # Remove local libs
 RUN rm -rf /libs
+
+# Remove local projects
+RUN rm -rf /projects
+
+# Copy dagit workspace
+COPY ${PROJECT_PATH}/workspace.yaml ./

@@ -1,12 +1,9 @@
-include ../../tools/Docker.mk
-include ../../tools/Lint.mk
-include ../../tools/Poetry.mk
-include ../../tools/Test.mk
+include ../../makefiles/Docker.mk
+include ../../makefiles/Lint.mk
+include ../../makefiles/Test.mk
 
 
 all: build lint test
-
-lock: poetry-lock
 
 build: docker-build
 
