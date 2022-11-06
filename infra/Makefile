@@ -6,6 +6,12 @@ FLAGS :=
 STACK := dev
 
 
+guard-%:
+	@if [ "${${*}}" = "" ]; then \
+		echo "Environment variable $* not set!"; \
+		exit 1; \
+	fi
+
 all: build lint test
 
 build:
@@ -17,10 +23,12 @@ test: test-unit
 
 shell: docker-shell
 
-up:
-	pulumi update --stack ${STACK} ${FLAGS}
-
-list-stacks:
-	pulumi stack ls
+up: guard-AWS_ACCESS_KEY_ID guard-AWS_SECRET_ACCESS_KEY guard-AWS_REGION guard-PULUMI_ACCESS_TOKEN
+	${DOCKER_RUN} -it \
+		-e AWS_ACCESS_KEY_ID \
+		-e AWS_SECRET_ACCESS_KEY \
+		-e AWS_REGION \
+		-e PULUMI_ACCESS_TOKEN \
+			${PROJECT_NAME} pulumi up --stack ${STACK} ${FLAGS}
 
 clean: docker-images-remove
