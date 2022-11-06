@@ -1,7 +1,7 @@
 import pulumi
 import pulumi_aws as aws
 
-from components import security_groups as sg
+from infra import security_groups as sg
 
 
 config = pulumi.Config()

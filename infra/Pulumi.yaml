@@ -1,6 +1,4 @@
 name: forgotify
 description: Forgotify Infra
-runtime:
-    name: python
-    options:
-        virtualenv: venv
+runtime: python
+main: infra
