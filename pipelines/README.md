@@ -1,6 +1,12 @@
 # Pipelines
 
-Batch Database Update is a project that aims to update the media database as a batch process.
+Pipelines is a project that aims to orchestrate the execution of jobs, such as a job that periodically populates a database.
+
+## Important Notes
+
+1. This project is powered by [Dagster](https://dagster.io/), which enables a serverless deployment to orchestrate jobs without spinning up any infrastructure.
+
+2. Tests were not implemented since they would be redundant, given the simplicity of the current pipelines.
 
 ## How to run locally
 
@@ -10,53 +16,11 @@ Build the docker image:
 make build
 ```
 
-Run Python within the docker image:
+Some pipelines require environment variables to work properly. Set them in a `.env` file:
 
 ```sh
-make shell
-```
-
-Stop the server when done using it:
-
-```sh
-make stop
-```
-
-## How to test locally
-
-Lint files (flake8, mypy and bandit):
-
-```sh
-make lint
-```
-
-Test functionalities:
-
-```sh
-make test
-```
-
-Alternatively, the following is an all-in-one command to build, lint and test:
-
-```sh
-make all
-```
-
-## How to create migrations
-
-Create a new revision:
-
-```sh
-make migrations-revision
-```
-
-## How to apply migrations
-
-> *Migrations are automatically applied to local databases when running tests or shell.*
-
-Set the environment variables in a `.env` file:
-
-```sh
+MEDIA_TOOLS_CLIENT_ID=
+MEDIA_TOOLS_CLIENT_SECRET=
 POSTGRES_HOST=
 POSTGRES_PORT=
 POSTGRES_USERNAME=
@@ -70,8 +34,30 @@ Export the environment variables:
 export $(cat .env)
 ```
 
-Apply migrations:
+Run the server:
+
+> The server will be available on http://0.0.0.0:3000.
 
 ```sh
-make migrations-apply-remote
+make server
+```
+
+Optionally, remove the docker image:
+
+```sh
+make clean
+```
+
+## How to lint locally
+
+Lint files (flake8, mypy and bandit):
+
+```sh
+make lint
+```
+
+Alternatively, the following is an all-in-one command to build and lint:
+
+```sh
+make all
 ```

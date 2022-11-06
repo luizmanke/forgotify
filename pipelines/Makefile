@@ -1,9 +1,8 @@
 include ../makefiles/Docker.mk
 include ../makefiles/Lint.mk
-include ../makefiles/Test.mk
 
 
-all: build lint test
+all: build lint
 
 build:
 	make docker-build CD=../
