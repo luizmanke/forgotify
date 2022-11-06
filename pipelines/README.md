@@ -6,7 +6,7 @@ Pipelines is a project that aims to orchestrate the execution of jobs, such as a
 
 1. This project is powered by [Dagster](https://dagster.io/), which enables a serverless deployment to orchestrate jobs without spinning up any infrastructure.
 
-2. Tests were not implemented since they would be redundant, given the simplicity of the current pipelines.
+2. Tests were not implemented since they would be redundant, given that the projects used within the pipelines have already been tested.
 
 ## How to run locally
 
