@@ -10,7 +10,7 @@ Build the docker image:
 make build
 ```
 
-Run Python within the docker image:
+Run bash within the docker image:
 
 ```sh
 make shell

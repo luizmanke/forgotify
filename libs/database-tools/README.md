@@ -16,7 +16,7 @@ Build the docker image:
 make build
 ```
 
-Run Python within the docker image with its database:
+Run bash within the docker image with its database:
 
 ```sh
 make shell
