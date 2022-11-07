@@ -1,2 +1,2 @@
-from components import databases
-from components import security_groups
+from infra import databases  # noqa
+from infra import security_groups  # noqa

@@ -19,13 +19,13 @@ docker-build:
 		.
 
 docker-shell:
-	${DOCKER_RUN} -it ${PROJECT_NAME} python
+	${DOCKER_RUN} -it ${PROJECT_NAME} /bin/bash
 
 docker-compose-shell:
-	${DOCKER_COMPOSE_RUN} ${PROJECT_SERVICE} sh -c "python"
+	${DOCKER_COMPOSE_RUN} ${PROJECT_SERVICE} sh -c "/bin/bash"
 
 docker-compose-shell-wait:
-	${DOCKER_COMPOSE_RUN} ${PROJECT_SERVICE} sh -c "/wait && python"
+	${DOCKER_COMPOSE_RUN} ${PROJECT_SERVICE} sh -c "/wait && /bin/bash"
 
 docker-compose-stop:
 	docker-compose down --remove-orphans

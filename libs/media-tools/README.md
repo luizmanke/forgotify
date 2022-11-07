@@ -10,7 +10,7 @@ Build the docker image:
 make build
 ```
 
-Run Python within the docker image:
+Run bash within the docker image:
 
 ```sh
 make shell
@@ -34,4 +34,12 @@ Alternatively, the following is an all-in-one command to build, lint and test:
 
 ```sh
 make all
+```
+
+## How to clean the workspace
+
+Remove the docker image:
+
+```sh
+make clean
 ```

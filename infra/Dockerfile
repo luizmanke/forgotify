@@ -11,24 +11,20 @@ WORKDIR /app
 RUN pip install poetry \
     && poetry config virtualenvs.create false
 
-# Copy local libs
-COPY libs/ /libs/
-
-# Copy local projects
-COPY projects/ /projects/
-
 # Install package dependencies
 COPY ${PROJECT_PATH}/poetry.lock ${PROJECT_PATH}/pyproject.toml ./
 RUN poetry install --no-root --no-interaction --no-ansi
 
 # Mount package
-COPY ${PROJECT_PATH}/pipelines/ pipelines/
+COPY ${PROJECT_PATH}/__main__.py ./
+COPY ${PROJECT_PATH}/infra/ infra/
 
-# Remove local libs
-RUN rm -rf /libs
+# Install pulumi
+RUN curl -fsSL https://get.pulumi.com | sh
+ENV PATH=$PATH:/root/.pulumi/bin
 
-# Remove local projects
-RUN rm -rf /projects
+# Copy pulumi files
+COPY ${PROJECT_PATH}/Pulumi.yaml ${PROJECT_PATH}/Pulumi.*.yaml ./
 
-# Copy dagit workspace
-COPY ${PROJECT_PATH}/workspace.yaml ./
+# Install pulumi plugins
+RUN pulumi plugin install

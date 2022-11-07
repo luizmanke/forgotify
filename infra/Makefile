@@ -1,9 +1,34 @@
+include ../makefiles/Docker.mk
+include ../makefiles/Lint.mk
+include ../makefiles/Test.mk
+
 FLAGS := 
 STACK := dev
 
 
-up:
-	pulumi update --stack ${STACK} ${FLAGS}
+guard-%:
+	@if [ "${${*}}" = "" ]; then \
+		echo "Environment variable $* not set!"; \
+		exit 1; \
+	fi
 
-list-stacks:
-	pulumi stack ls
+all: build lint test
+
+build:
+	make docker-build CD=../
+
+lint: lint-flake8 lint-mypy lint-bandit
+
+test: test-unit
+
+shell: docker-shell
+
+up: guard-AWS_ACCESS_KEY_ID guard-AWS_SECRET_ACCESS_KEY guard-AWS_REGION guard-PULUMI_ACCESS_TOKEN
+	${DOCKER_RUN} -it \
+		-e AWS_ACCESS_KEY_ID \
+		-e AWS_SECRET_ACCESS_KEY \
+		-e AWS_REGION \
+		-e PULUMI_ACCESS_TOKEN \
+			${PROJECT_NAME} pulumi up --stack ${STACK} ${FLAGS}
+
+clean: docker-images-remove
