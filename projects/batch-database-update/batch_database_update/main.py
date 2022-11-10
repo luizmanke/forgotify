@@ -5,22 +5,26 @@ import string
 from loguru import logger
 
 from database_tools.postgres import Session
-from media_tools import search
+from media_tools.search import Provider
 
 from batch_database_update import models
 
 
-def _get_and_update_artists(session: Session, execution_time: datetime):
+def _get_and_update_artists(
+    media_provider: Provider,
+    db_session: Session,
+    execution_time: datetime
+):
 
     for query in list(string.ascii_uppercase):
         logger.debug(f"Artist query: '{query}'.")
-        artists = search.get_artists(query)
+        artists = media_provider.get_artists(query)
 
         for artist in artists:
-            items = session.search(models.Artist, (models.Artist.id == artist.id))
+            items = db_session.search(models.Artist, (models.Artist.id == artist.id))
 
             if not items:
-                session.add(
+                db_session.add(
                     models.Artist(
                         id=artist.id,
                         name=artist.name,
@@ -37,14 +41,19 @@ def _get_and_update_artists(session: Session, execution_time: datetime):
                 item.n_followers = artist.n_followers
                 item.popularity = artist.popularity
                 item.updated_at = execution_time
-                session.update(item)
+                db_session.update(item)
 
 
 def run():
 
     execution_time = datetime.utcnow()
 
-    session = Session(
+    media_provider = Provider(
+        client_id=os.environ.get("MEDIA_TOOLS_CLIENT_ID"),
+        client_secret=os.environ.get("MEDIA_TOOLS_CLIENT_SECRET")
+    )
+
+    db_session = Session(
         host=os.environ.get("POSTGRES_HOST"),
         port=os.environ.get("POSTGRES_PORT"),
         username=os.environ.get("POSTGRES_USERNAME"),
@@ -52,4 +61,4 @@ def run():
         database=os.environ.get("POSTGRES_DATABASE"),
     )
 
-    _get_and_update_artists(session, execution_time)
+    _get_and_update_artists(media_provider, db_session, execution_time)
