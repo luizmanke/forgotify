@@ -2,6 +2,12 @@
 
 Media Tools is a package that aims to ease the search for all kinds of media, such as songs, artists, and playlists.
 
+## Topics
+
+* [How to run locally](#how-to-run-locally)
+* [How to test locally](#how-to-test-locally)
+* [How to clean the workspace](#how-to-clean-the-workspace)
+
 ## How to run locally
 
 Build the docker image:
