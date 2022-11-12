@@ -4,7 +4,13 @@ Database Tools is a package that aims to ease operations to databases, such as r
 
 Currently, it supports:
 
-* Postgres
+* [Postgres](https://www.postgresql.org/)
+
+## Topics
+
+* [How to run locally](#how-to-run-locally)
+* [How to test locally](#how-to-test-locally)
+* [How to clean the workspace](#how-to-clean-the-workspace)
 
 ## How to run locally
 
