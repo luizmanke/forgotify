@@ -1,8 +1,15 @@
 # Infra
 
-Infra is a project that holds all other projects' infrastructure as code.
+Infra is a project that holds other projects' infrastructure as code.
 
 It is powered by [Pulumi](https://www.pulumi.com/), which provides built-in state and secrets management, integrates with source control and CI/CD, and offers a web console and API that make it easier to visualize and manage infrastructure.
+
+## Topics
+
+* [Requirements](#requirements)
+* [How to run locally](#how-to-run-locally)
+* [How to test locally](#how-to-test-locally)
+* [How to clean the workspace](#how-to-clean-the-workspace)
 
 ## Requirements
 
@@ -20,10 +27,13 @@ make build
 
 Set the environment variables in a `.env` file to enable connection to the Pulumi Server and the AWS Cloud:
 
+> *References: [AWS Access Key](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) and [Pulumi Access Token](https://www.pulumi.com/docs/intro/pulumi-service/organization-access-tokens/).*
+
 ```sh
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 AWS_REGION=
+
 PULUMI_ACCESS_TOKEN=
 ```
 
