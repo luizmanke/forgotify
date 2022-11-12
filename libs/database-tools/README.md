@@ -56,7 +56,7 @@ make all
 
 ## How to clean the workspace
 
-Stop containers, remove containers and remove the docker image:
+Stop containers, remove containers, and remove the docker image:
 
 ```sh
 make clean

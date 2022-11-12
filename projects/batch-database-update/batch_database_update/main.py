@@ -49,16 +49,16 @@ def run():
     execution_time = datetime.utcnow()
 
     media_provider = Provider(
-        client_id=os.environ.get("MEDIA_TOOLS_CLIENT_ID"),
-        client_secret=os.environ.get("MEDIA_TOOLS_CLIENT_SECRET")
+        client_id=os.environ.get("MEDIA_PROVIDER_CLIENT_ID"),
+        client_secret=os.environ.get("MEDIA_PROVIDER_CLIENT_SECRET")
     )
 
     db_session = Session(
-        host=os.environ.get("POSTGRES_HOST"),
-        port=os.environ.get("POSTGRES_PORT"),
-        username=os.environ.get("POSTGRES_USERNAME"),
-        password=os.environ.get("POSTGRES_PASSWORD"),
-        database=os.environ.get("POSTGRES_DATABASE"),
+        host=os.environ.get("DATABASE_HOST"),
+        port=os.environ.get("DATABASE_PORT"),
+        username=os.environ.get("DATABASE_USERNAME"),
+        password=os.environ.get("DATABASE_PASSWORD"),
+        database=os.environ.get("DATABASE_NAME"),
     )
 
     _get_and_update_artists(media_provider, db_session, execution_time)
