@@ -7,9 +7,9 @@ It is powered by [Pulumi](https://www.pulumi.com/), which provides built-in stat
 ## Topics
 
 * [Requirements](#requirements)
-* [How to run locally](#how-to-run-locally)
-* [How to test locally](#how-to-test-locally)
-* [How to clean the workspace](#how-to-clean-the-workspace)
+* [Running locally](#running-locally)
+* [Testing locally](#testing-locally)
+* [Cleaning the workspace](#cleaning-the-workspace)
 
 ## Requirements
 
@@ -17,7 +17,7 @@ It is powered by [Pulumi](https://www.pulumi.com/), which provides built-in stat
 
 * An [AWS Account](https://aws.amazon.com/free) with an [IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html) to place the infrastructure.
 
-## How to run locally
+## Running locally
 
 Build the docker image:
 
@@ -61,7 +61,7 @@ Optionally, run bash within the docker image:
 make shell
 ```
 
-## How to test locally
+## Testing locally
 
 Build the docker image:
 
@@ -89,7 +89,7 @@ Alternatively, the following is an all-in-one command to build, lint and test:
 make all
 ```
 
-## How to clean the workspace
+## Cleaning the workspace
 
 Remove the docker image:
 

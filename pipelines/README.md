@@ -6,11 +6,11 @@ It is powered by [Dagster](https://dagster.io/), which enables a serverless depl
 
 ## Topics
 
-* [How to run locally](#how-to-run-locally)
-* [How to test locally](#how-to-test-locally)
-* [How to clean the workspace](#how-to-clean-the-workspace)
+* [Running locally](#running-locally)
+* [Testing locally](#testing-locally)
+* [Cleaning the workspace](#cleaning-the-workspace)
 
-## How to run locally
+## Running locally
 
 Build the docker image:
 
@@ -48,7 +48,7 @@ Optionally, run bash within the docker image:
 make shell
 ```
 
-## How to test locally
+## Testing locally
 
 Build the docker image:
 
@@ -76,7 +76,7 @@ Alternatively, the following is an all-in-one command to build, lint and test:
 make all
 ```
 
-## How to clean the workspace
+## Cleaning the workspace
 
 Remove the docker image:
 

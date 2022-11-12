@@ -5,11 +5,11 @@ Batch Database Update is a project that aims to update the media database as a b
 ## Topics
 
 * [Requirements](#requirements)
-* [How to run locally](#how-to-run-locally)
-* [How to test locally](#how-to-test-locally)
-* [How to create migrations](#how-to-create-migrations)
-* [How to apply migrations](#how-to-apply-migrations)
-* [How to clean the workspace](#how-to-clean-the-workspace)
+* [Running locally](#running-locally)
+* [Testing locally](#testing-locally)
+* [Creating migrations](#creating-migrations)
+* [Applying migrations](#applying-migrations)
+* [Cleaning the workspace](#cleaning-the-workspace)
 
 ## Requirements
 
@@ -30,7 +30,7 @@ MEDIA_PROVIDER_CLIENT_SECRET=
 
 The `MEIDA_PROVIDER` credentials are specified on the [libs/media-tools/](../../libs/media-tools/README.md#requirements) documentation.
 
-## How to run locally
+## Running locally
 
 Build the docker image:
 
@@ -50,7 +50,7 @@ Stop the server when done using it:
 make stop
 ```
 
-## How to test locally
+## Testing locally
 
 Lint files (flake8, mypy and bandit):
 
@@ -70,7 +70,7 @@ Alternatively, the following is an all-in-one command to build, lint and test:
 make all
 ```
 
-## How to create migrations
+## Creating migrations
 
 This project uses [Alembic](https://alembic.sqlalchemy.org/en/latest/), which is a lightweight database migration tool for SQLAlchemy.
 
@@ -82,7 +82,7 @@ make migrations-revision
 
 After running the previous command, a new revision should be available in the [migrations/versions/](./migrations/versions/) folder.
 
-## How to apply migrations
+## Applying migrations
 
 > *Migrations are automatically applied to local databases when running tests or shell.*
 
@@ -108,7 +108,7 @@ Apply migrations:
 make migrations-apply-remote
 ```
 
-## How to clean the workspace
+## Cleaning the workspace
 
 Stop containers, remove containers, and remove the docker image:
 
