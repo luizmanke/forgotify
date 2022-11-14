@@ -13,9 +13,9 @@ Batch Database Update is a project that aims to update the media database as a b
 
 ## Requirements
 
-To work with a remote server, the following environment variables are required:
+The following environment variables are required:
 
-> *Local runs doesn't require any environment variable.*
+> *`MEIDA_PROVIDER` credentials are specified on the [libs/media-tools/](../../libs/media-tools/README.md#requirements) documentation.*
 
 ```sh
 DATABASE_HOST=
@@ -28,7 +28,7 @@ MEDIA_PROVIDER_CLIENT_ID=
 MEDIA_PROVIDER_CLIENT_SECRET=
 ```
 
-The `MEIDA_PROVIDER` credentials are specified on the [libs/media-tools/](../../libs/media-tools/README.md#requirements) documentation.
+*Note: Database environment variables are only required when working with a remote server. For local runs, these values are already set in the [docker-compose file](./docker-compose.yml)*
 
 ## Running locally
 

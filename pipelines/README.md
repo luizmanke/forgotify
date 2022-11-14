@@ -20,7 +20,7 @@ make build
 
 Some pipelines require environment variables to work properly. Set them in a `.env` file:
 
-> *Go to the project directory to check the required environment variables.*
+> *To check the required environment variables, read the project documentation.*
 
 ```sh
 ENVIRONMENT_VARIABLE_1=value-1
