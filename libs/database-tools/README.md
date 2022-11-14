@@ -4,9 +4,15 @@ Database Tools is a package that aims to ease operations to databases, such as r
 
 Currently, it supports:
 
-* Postgres
+* [Postgres](https://www.postgresql.org/)
 
-## How to run locally
+## Topics
+
+* [Running locally](#running-locally)
+* [Testing locally](#testing-locally)
+* [Cleaning the workspace](#cleaning-the-workspace)
+
+## Running locally
 
 > *The project makes use of docker-compose to start local databases.*
 
@@ -28,7 +34,7 @@ Stop the server when done using it:
 make stop
 ```
 
-## How to test locally
+## Testing locally
 
 Lint files (flake8, mypy and bandit):
 
@@ -48,9 +54,9 @@ Alternatively, the following is an all-in-one command to build, lint and test:
 make all
 ```
 
-## How to clean the workspace
+## Cleaning the workspace
 
-Stop containers, remove containers and remove the docker image:
+Stop containers, remove containers, and remove the docker image:
 
 ```sh
 make clean

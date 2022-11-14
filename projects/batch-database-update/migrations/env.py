@@ -21,11 +21,11 @@ from batch_database_update import models  # noqa
 target_metadata = models.Base.metadata
 
 # Values from the .ini file can be set:
-host = os.environ.get("POSTGRES_HOST")
-port = os.environ.get("POSTGRES_PORT")
-username = os.environ.get("POSTGRES_USERNAME")
-password = os.environ.get("POSTGRES_PASSWORD")
-database = os.environ.get("POSTGRES_DATABASE")
+host = os.environ.get("DATABASE_HOST")
+port = os.environ.get("DATABASE_PORT")
+username = os.environ.get("DATABASE_USERNAME")
+password = os.environ.get("DATABASE_PASSWORD")
+database = os.environ.get("DATABASE_NAME")
 config.set_main_option(
     "sqlalchemy.url",
     f"postgresql://{username}:{password}@{host}:{port}/{database}"

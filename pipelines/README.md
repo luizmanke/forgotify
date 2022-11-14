@@ -4,7 +4,13 @@ Pipelines is a project that aims to orchestrate the execution of jobs, such as a
 
 It is powered by [Dagster](https://dagster.io/), which enables a serverless deployment to orchestrate jobs without spinning up any infrastructure.
 
-## How to run locally
+## Topics
+
+* [Running locally](#running-locally)
+* [Testing locally](#testing-locally)
+* [Cleaning the workspace](#cleaning-the-workspace)
+
+## Running locally
 
 Build the docker image:
 
@@ -14,14 +20,12 @@ make build
 
 Some pipelines require environment variables to work properly. Set them in a `.env` file:
 
+> *To check the required environment variables, read the project documentation.*
+
 ```sh
-MEDIA_TOOLS_CLIENT_ID=
-MEDIA_TOOLS_CLIENT_SECRET=
-POSTGRES_HOST=
-POSTGRES_PORT=
-POSTGRES_USERNAME=
-POSTGRES_PASSWORD=
-POSTGRES_DATABASE=
+ENVIRONMENT_VARIABLE_1=
+ENVIRONMENT_VARIABLE_2=
+...
 ```
 
 Export the environment variables:
@@ -44,7 +48,7 @@ Optionally, run bash within the docker image:
 make shell
 ```
 
-## How to test locally
+## Testing locally
 
 Build the docker image:
 
@@ -72,7 +76,7 @@ Alternatively, the following is an all-in-one command to build, lint and test:
 make all
 ```
 
-## How to clean the workspace
+## Cleaning the workspace
 
 Remove the docker image:
 
