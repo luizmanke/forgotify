@@ -23,7 +23,7 @@ Some pipelines require environment variables to work properly. Set them in a `.e
 > *To check the required environment variables, read the project documentation.*
 
 ```sh
-ENVIRONMENT_VARIABLE_1=value-1
+ENVIRONMENT_VARIABLE_1=
 ENVIRONMENT_VARIABLE_2=value-2
 ...
 ```
