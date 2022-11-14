@@ -6,7 +6,6 @@ Forgotify is a service that aims to help people find unpopular songs based on an
 
 * [Project structure](#project-structure)
 * [Requirements](#requirements)
-* [Contributing]()
 
 ## Project structure
 
