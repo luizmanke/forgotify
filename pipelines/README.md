@@ -24,7 +24,7 @@ Some pipelines require environment variables to work properly. Set them in a `.e
 
 ```sh
 ENVIRONMENT_VARIABLE_1=
-ENVIRONMENT_VARIABLE_2=value-2
+ENVIRONMENT_VARIABLE_2=
 ...
 ```
 
