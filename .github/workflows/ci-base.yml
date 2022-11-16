@@ -25,14 +25,9 @@ jobs:
       - name: List dependencies
         id: list_dependencies
         run: |
-          PACKAGE_PATH=${{ inputs.package_path }}/**
-          DEPENDENCIES_PATH=$(
-            grep -o '"\.\./.*"' ${{ inputs.package_path }}/pyproject.toml |
-            sed -e 's#"##g' -e 's#\.\./##g' -e 's#$#/**#g' |
-            tr '\n' ',' |
-            sed -e 's#,$##g'
-          )
-          echo "folders=$PACKAGE_PATH,$DEPENDENCIES_PATH" >> $GITHUB_OUTPUT
+          dependencies_path=$(./scripts/list_package_dependencies.sh ${{ inputs.package_path }})
+          dependencies_wildcard=$(./scripts/join_paths_with_wildcard.sh ${{ inputs.package_path }} $dependencies_path)
+          echo "folders=$dependencies_wildcard" >> $GITHUB_OUTPUT
 
       - name: Check changes
         id: check_changes

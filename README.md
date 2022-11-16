@@ -4,18 +4,7 @@ Forgotify is a service that aims to help people find unpopular songs based on an
 
 ## Topics
 
-* [Project structure](#project-structure)
 * [Requirements](#requirements)
-
-## Project structure
-
-The project is structured as a monorepo, where:
-
-* [infra](./infra/) holds all the infrastructure
-* [libs](./libs/) holds the common libraries shared between projects
-* [makefiles](./makefiles/) holds the common Makefiles commands used within the repo
-* [pipelines](./pipelines/) holds the project's workflows
-* [projects](./projects/) holds different functionalities for the main project
 
 ## Requirements
 
