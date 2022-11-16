@@ -1,0 +1,4 @@
+config:
+  forgotify:environment: qa
+  forgotify:database_medias_password:
+    secure: AAABAHnJWL7N/s11m2xj32Inrf0LKrd2bZCoNF3MmB5lbBRquaTgvbf1iq7l0FAL0PDCeg==
