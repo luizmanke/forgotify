@@ -23,8 +23,9 @@ test: test-unit
 
 shell: docker-shell
 
+up: DOCKER_FLAGS=-it
 up: guard-AWS_ACCESS_KEY_ID guard-AWS_SECRET_ACCESS_KEY guard-AWS_REGION guard-PULUMI_ACCESS_TOKEN
-	${DOCKER_RUN} -it \
+	${DOCKER_RUN} ${DOCKER_FLAGS} \
 		-e AWS_ACCESS_KEY_ID \
 		-e AWS_SECRET_ACCESS_KEY \
 		-e AWS_REGION \
