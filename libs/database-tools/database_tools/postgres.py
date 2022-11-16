@@ -10,7 +10,6 @@ class ItemIsNotPersistedError(Exception):
     pass
 
 
-# some change
 class Session:
 
     def __init__(
