@@ -14,7 +14,7 @@ schedules_list = [
 
 
 @repository
-def main():
+def pipelines():
     return [
         *jobs_list,
         *schedules_list
