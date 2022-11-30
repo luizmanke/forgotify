@@ -1,1 +1,1 @@
-from .repository import main  # noqa
+from .repository import pipelines  # noqa
