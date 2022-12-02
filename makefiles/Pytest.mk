@@ -11,11 +11,15 @@ DOCKER_RUN := docker run --rm
 DOCKER_COMPOSE_RUN := docker-compose run --rm
 
 
-test-unit:
+pytest-unit:
 	${DOCKER_RUN} ${TEST_VOLUME} ${PROJECT_NAME} ${TEST_CMD} ${TEST_FOLDER}/unit
 
-test-integration:
+pytest-integration:
 	${DOCKER_COMPOSE_RUN} ${TEST_VOLUME} ${PROJECT_SERVICE} sh -c "${TEST_CMD} ${TEST_FOLDER}/integration"
 
-test-integration-wait:
+pytest-integration-wait:
 	${DOCKER_COMPOSE_RUN} ${TEST_VOLUME} ${PROJECT_SERVICE} sh -c "/wait && ${TEST_CMD} ${TEST_FOLDER}/integration"
+
+pytest-system: OPTIONS=
+pytest-system:
+	${DOCKER_RUN} ${OPTIONS} ${TEST_VOLUME} ${PROJECT_NAME} ${TEST_CMD} ${TEST_FOLDER}/system

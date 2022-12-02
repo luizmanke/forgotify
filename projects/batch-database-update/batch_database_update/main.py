@@ -17,8 +17,8 @@ def _get_and_update_artists(
 ):
 
     for query in list(string.ascii_uppercase):
-        logger.debug(f"Artist query: '{query}'.")
         artists = media_provider.get_artists(query)
+        logger.debug(f"Artist query '{query}' returned {len(artists)} items.")
 
         for artist in artists:
             items = db_session.search(models.Artist, (models.Artist.id == artist.id))
