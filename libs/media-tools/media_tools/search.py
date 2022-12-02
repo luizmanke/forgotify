@@ -16,7 +16,7 @@ class Provider(Spotify):
     def __init__(self, client_id: str, client_secret: str) -> None:
         super().__init__(client_credentials_manager=Credentials(client_id, client_secret))
 
-    def get_artists(self, query: str) -> List[schemas.Artist]:
+    def get_artists(self, query: str, max_items: int = 1_000) -> List[schemas.Artist]:
 
         MAX_ITEMS_PER_REQUEST = 50
         MAX_OFFSET = 1_000
@@ -38,7 +38,9 @@ class Provider(Spotify):
                     )
                 )
 
-            if len(artists) >= response["artists"]["total"]:
+            n_items_is_gte_total_results = len(artists) >= response["artists"]["total"]
+            n_items_is_gte_max_items = len(artists) >= max_items
+            if n_items_is_gte_total_results or n_items_is_gte_max_items:
                 break
 
         return artists

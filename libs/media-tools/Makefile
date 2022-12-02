@@ -1,6 +1,6 @@
 include ../../makefiles/Docker.mk
 include ../../makefiles/Lint.mk
-include ../../makefiles/Test.mk
+include ../../makefiles/Pytest.mk
 
 
 all: build lint test
@@ -9,7 +9,7 @@ build: docker-build
 
 lint: lint-flake8 lint-mypy lint-bandit
 
-test: test-unit
+test: pytest-unit
 
 shell: docker-shell
 

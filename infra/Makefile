@@ -1,6 +1,6 @@
 include ../makefiles/Docker.mk
 include ../makefiles/Lint.mk
-include ../makefiles/Test.mk
+include ../makefiles/Pytest.mk
 
 FLAGS := 
 STACK := dev
@@ -19,7 +19,7 @@ build:
 
 lint: lint-flake8 lint-mypy lint-bandit
 
-test: test-unit
+test: pytest-unit
 
 shell: docker-shell
 
