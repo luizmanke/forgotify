@@ -15,91 +15,91 @@ concurrency:
 
 jobs:
 
-  update_infra:
-    name: Update infra
-    runs-on: ubuntu-latest
-    steps:
+  # update_infra:
+  #   name: Update infra
+  #   runs-on: ubuntu-latest
+  #   steps:
 
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
 
-      - name: Build
-        run: |
-          make -C infra build
+  #     - name: Build
+  #       run: |
+  #         make -C infra build
 
-      - name: Update infra
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-        run: |
-          make -C infra up STACK=qa FLAGS='--skip-preview' DOCKER_FLAGS=
+  #     - name: Update infra
+  #       env:
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         AWS_REGION: ${{ secrets.AWS_REGION }}
+  #         PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+  #       run: |
+  #         make -C infra up STACK=qa FLAGS='--skip-preview' DOCKER_FLAGS=
 
-  apply_migrations:
-    name: Apply migrations
-    runs-on: ubuntu-latest
-    needs: update_infra
-    steps:
+  # apply_migrations:
+  #   name: Apply migrations
+  #   runs-on: ubuntu-latest
+  #   needs: update_infra
+  #   steps:
 
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
 
-      - name: Build
-        run: |
-          make -C projects/batch-database-update build
+  #     - name: Build
+  #       run: |
+  #         make -C projects/batch-database-update build
 
-      - name: Apply migrations
-        env:
-          DATABASE_HOST: ${{ secrets.DATABASE_HOST_QA }}
-          DATABASE_PORT: ${{ secrets.DATABASE_PORT_QA }}
-          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME_QA }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD_QA }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME_QA }}
-        run: |
-          make -C projects/batch-database-update migrations-apply-remote
+  #     - name: Apply migrations
+  #       env:
+  #         DATABASE_HOST: ${{ secrets.DATABASE_HOST_QA }}
+  #         DATABASE_PORT: ${{ secrets.DATABASE_PORT_QA }}
+  #         DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME_QA }}
+  #         DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD_QA }}
+  #         DATABASE_NAME: ${{ secrets.DATABASE_NAME_QA }}
+  #       run: |
+  #         make -C projects/batch-database-update migrations-apply-remote
 
-  deploy_pipelines:
-    name: Deploy pipelines
-    runs-on: ubuntu-latest
-    needs: apply_migrations
-    steps:
+  # deploy_pipelines:
+  #   name: Deploy pipelines
+  #   runs-on: ubuntu-latest
+  #   needs: apply_migrations
+  #   steps:
 
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
 
-      - name: Build
-        run: |
-          make -C pipelines build
+  #     - name: Build
+  #       run: |
+  #         make -C pipelines build
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
+  #     - name: Setup Python
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: "3.9"
 
-      - name: Deploy
-        run: |
-          pip install dagster-cloud==1.0.17
-          cd pipelines && \
-            dagster-cloud serverless deploy \
-              --api-token ${{ secrets.DAGSTER_API_TOKEN }} \
-              --organization ${{ secrets.DAGSTER_ORGANIZATION_ID }} \
-              --deployment prod \
-              --location-name main \
-              --base-image pipelines:latest \
-              --package-name pipelines \
-              --commit-hash ${GITHUB_SHA}
+  #     - name: Deploy
+  #       run: |
+  #         pip install dagster-cloud==1.0.17
+  #         cd pipelines && \
+  #           dagster-cloud serverless deploy \
+  #             --api-token ${{ secrets.DAGSTER_API_TOKEN }} \
+  #             --organization ${{ secrets.DAGSTER_ORGANIZATION_ID }} \
+  #             --deployment prod \
+  #             --location-name main \
+  #             --base-image pipelines:latest \
+  #             --package-name pipelines \
+  #             --commit-hash ${GITHUB_SHA}
 
   test_system:
     name: Test system
     runs-on: ubuntu-latest
-    needs: deploy_pipelines
+    # needs: deploy_pipelines
     steps:
 
       - name: Checkout repository
@@ -112,5 +112,13 @@ jobs:
           make -C projects/batch-database-update build
 
       - name: Test
+        env:
+          DATABASE_HOST: ${{ secrets.DATABASE_HOST_QA }}
+          DATABASE_PORT: ${{ secrets.DATABASE_PORT_QA }}
+          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME_QA }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD_QA }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME_QA }}
+          MEDIA_PROVIDER_CLIENT_ID: ${{ secrets.MEDIA_PROVIDER_CLIENT_ID_QA }}
+          MEDIA_PROVIDER_CLIENT_SECRET: ${{ secrets.MEDIA_PROVIDER_CLIENT_SECRET_QA }}
         run: |
           make -C projects/batch-database-update test-system
