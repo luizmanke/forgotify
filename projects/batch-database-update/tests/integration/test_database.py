@@ -1,5 +1,6 @@
 from copy import deepcopy
 from datetime import datetime
+from typing import List
 
 from media_tools import schemas
 import pytest
@@ -21,69 +22,167 @@ def session() -> Session:
 
 
 @pytest.fixture
-def populate_table(session: Session):
-    session.add(
-        models.Artist(
-            id="0",
-            name="some-name",
-            n_followers=0,
-            popularity=0.0,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow()
+def populate_artists(session):
+
+    execution_time = datetime.utcnow()
+
+    for i in range(10):
+        session.add(
+            models.Artist(
+                id=f"{i}",
+                name="some-name",
+                n_followers=0,
+                popularity=0.0,
+                created_at=execution_time,
+                updated_at=execution_time
+            )
         )
-    )
 
 
 @pytest.fixture
-def clear_table(session: Session):
+def populate_tracks(session):
+
+    execution_time = datetime.utcnow()
+
+    for i in range(10):
+        session.add(
+            models.Track(
+                id=f"{i}",
+                name="some-name",
+                popularity=0.0,
+                created_at=execution_time,
+                updated_at=execution_time
+            )
+        )
+
+
+@pytest.fixture
+def clear_table(session):
     yield
     session._session.query(models.Artist).delete()
+    # session._session.query(models.ArtistToTrack).delete()
+    session._session.query(models.Track).delete()
 
 
 @pytest.fixture
-def artist():
-    return schemas.Artist(
-        id="0",
-        name="some-name",
-        n_followers=0,
-        genres=["some-genre"],
-        popularity=0.0
-    )
+def fake_artists() -> List[schemas.Artist]:
+
+    artists = []
+    for i in range(10):
+        artists.append(
+            schemas.Artist(
+                id=f"{i}",
+                name="some-name",
+                n_followers=0,
+                genres=["some-genre"],
+                popularity=0.0
+            )
+        )
+
+    return artists
 
 
-def test_add_artist_without_item_in_database(session: Session, artist, clear_table):
+@pytest.fixture
+def fake_tracks() -> List[schemas.Track]:
 
-    items_before = session.search(models.Artist)
-    assert len(items_before) == 0
+    tracks = []
+    for i in range(10):
+        tracks.append(
+            schemas.Track(
+                id=f"{i}",
+                name="some-name",
+                popularity=0.0,
+                artists_id=["0", "1"]
+            )
+        )
+
+    return tracks
+
+
+def test_add_artists_without_item_in_database(session, fake_artists, clear_table):
+
+    artists_before = session.search(models.Artist)
+    assert len(artists_before) == 0
 
     execution_time = datetime.utcnow()
 
-    database.add_artist(artist, execution_time)
+    database.add_artists(fake_artists, execution_time)
 
-    items_after = session.search(models.Artist)
-    assert len(items_after) == 1
-    assert items_after[0].id == "0"
-    assert items_after[0].name == "some-name"
-    assert items_after[0].n_followers == 0
-    assert items_after[0].popularity == 0.0
-    assert items_after[0].created_at == execution_time
-    assert items_after[0].updated_at == execution_time
+    artists_after = session.search(models.Artist)
+    assert len(artists_after) == 10
+    assert artists_after[0].id == "0"
+    assert artists_after[0].name == "some-name"
+    assert artists_after[0].n_followers == 0
+    assert artists_after[0].popularity == 0.0
+    assert artists_after[0].created_at == execution_time
+    assert artists_after[0].updated_at == execution_time
 
 
-def test_add_artist_with_item_in_database(session: Session, artist, populate_table, clear_table):
+def test_add_artists_with_item_in_database(session, fake_artists, populate_artists, clear_table):
 
-    items_before = deepcopy(session.search(models.Artist))
-    assert len(items_before) == 1
+    artists_before = deepcopy(session.search(models.Artist))
+    assert len(artists_before) == 10
 
     execution_time = datetime.utcnow()
 
-    database.add_artist(artist, execution_time)
+    database.add_artists(fake_artists, execution_time)
 
-    items_after = session.search(models.Artist)
-    assert len(items_after) == 1
-    assert items_after[0].id == "0"
-    assert items_after[0].name == "some-name"
-    assert items_after[0].n_followers == 0
-    assert items_after[0].popularity == 0.0
-    assert items_after[0].created_at == items_before[0].created_at
-    assert items_after[0].updated_at > items_before[0].updated_at
+    artists_after = session.search(models.Artist)
+    assert len(artists_after) == 10
+    assert artists_after[0].id == "0"
+    assert artists_after[0].name == "some-name"
+    assert artists_after[0].n_followers == 0
+    assert artists_after[0].popularity == 0.0
+    assert artists_after[0].created_at == artists_before[0].created_at
+    assert artists_after[0].updated_at > artists_before[0].updated_at
+
+
+def test_add_tracks_without_item_in_database(session, fake_tracks, clear_table):
+
+    tracks_before = session.search(models.Track)
+    assert len(tracks_before) == 0
+
+    artists_to_tracks_before = session.search(models.ArtistToTrack)
+    assert len(artists_to_tracks_before) == 0
+
+    execution_time = datetime.utcnow()
+
+    database.add_tracks(fake_tracks, execution_time)
+
+    tracks_after = session.search(models.Track)
+    assert len(tracks_after) == 10
+    assert tracks_after[0].id == "0"
+    assert tracks_after[0].name == "some-name"
+    assert tracks_after[0].popularity == 0.0
+    assert tracks_after[0].created_at == execution_time
+    assert tracks_after[0].updated_at == execution_time
+
+    artists_to_tracks_after = session.search(models.ArtistToTrack)
+    assert len(artists_to_tracks_after) == 20
+    assert artists_to_tracks_after[0].artist_id == "0"
+    assert artists_to_tracks_after[0].track_id == "0"
+    assert artists_to_tracks_after[0].created_at == execution_time
+
+
+def test_add_tracks_with_item_in_database(session, fake_tracks, populate_tracks, clear_table):
+
+    tracks_before = deepcopy(session.search(models.Track))
+    assert len(tracks_before) == 10
+
+    artists_to_tracks_before = deepcopy(session.search(models.ArtistToTrack))
+    assert len(artists_to_tracks_before) == 20
+
+    execution_time = datetime.utcnow()
+
+    database.add_tracks(fake_tracks, execution_time)
+
+    tracks_after = session.search(models.Track)
+    assert len(tracks_after) == 10
+    assert tracks_after[0].id == "0"
+    assert tracks_after[0].name == "some-name"
+    assert tracks_after[0].popularity == 0.0
+    assert tracks_after[0].created_at == tracks_before[0].created_at
+    assert tracks_after[0].updated_at > tracks_before[0].updated_at
+
+    artists_to_tracks_after = session.search(models.ArtistToTrack)
+    assert len(artists_to_tracks_after) == 20

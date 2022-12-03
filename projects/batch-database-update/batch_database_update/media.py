@@ -1,11 +1,10 @@
 from functools import lru_cache
 import os
-import string
 from typing import List
 
 from loguru import logger
 
-from media_tools.schemas import Artist
+from media_tools import schemas
 from media_tools.search import Provider
 
 
@@ -17,14 +16,27 @@ def _provider() -> Provider:
     )
 
 
-def get_artists() -> List[Artist]:
+def get_artists(queries: List[str]) -> List[schemas.Artist]:
 
     artists = []
-    for query in list(string.ascii_uppercase):
+    for query in queries:
 
         items = _provider().get_artists(query)
-        logger.debug(f"Artist query '{query}' returned {len(items)} items.")
+        logger.debug(f"Artists for query '{query}' returned {len(items)} items.")
 
         artists.extend(items)
 
     return artists
+
+
+def get_tracks(artists: List[str]) -> List[schemas.Track]:
+
+    tracks = []
+    for artist in artists:
+
+        items = _provider().get_tracks(artist)
+        logger.debug(f"Tracks for artist '{artist}' returned {len(items)} items.")
+
+        tracks.extend(items)
+
+    return tracks
