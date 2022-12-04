@@ -39,53 +39,53 @@ def session():
 
 
 @pytest.fixture(scope="session")
-def create_table(session: Session):
+def create_table(session):
     Music.__table__.create(session._engine)
 
 
 @pytest.fixture
-def clear_table(session: Session):
+def clear_table(session):
     yield
     session._session.query(Music).delete()
 
 
 @pytest.fixture
-def populate_table(session: Session, create_table, item: Music, clear_table):
+def populate_table(session, create_table, item, clear_table):
     session._session.add(item)
     session._session.commit()
 
 
-def test_search_with_no_results(session: Session, create_table):
+def test_search_with_no_results(session, create_table):
     items = session.search(Music)
     assert len(items) == 0
 
 
-def test_search_with_results(session: Session, populate_table):
+def test_search_with_results(session, populate_table):
     items = session.search(Music)
     assert len(items) == 1
 
 
-def test_count_with_no_results(session: Session, create_table):
+def test_count_with_no_results(session, create_table):
     assert session.count(Music) == 0
 
 
-def test_count_with_results(session: Session, populate_table):
+def test_count_with_results(session, populate_table):
     assert session.count(Music) == 1
 
 
-def test_add_new_item(session: Session, create_table, item: Music, clear_table):
+def test_add_new_item(session, create_table, item, clear_table):
     assert session.count(Music) == 0
     session.add(item)
     assert session.count(Music) == 1
 
 
-def test_add_item_that_already_exists(session: Session, populate_table, item: Music):
+def test_add_item_that_already_exists(session, populate_table, item):
     assert session.count(Music) == 1
     session.add(item)
     assert session.count(Music) == 1
 
 
-def test_update_item(session: Session, populate_table, item: Music):
+def test_update_item(session, populate_table, item):
 
     assert session.count(Music) == 1
     assert session.search(Music)[0] == item
@@ -98,12 +98,12 @@ def test_update_item(session: Session, populate_table, item: Music):
     assert session.count(Music) == 1
 
 
-def test_delete_item(session: Session, populate_table, item: Music):
+def test_delete_item(session, populate_table, item):
     assert session.count(Music) == 1
     session.delete(item)
     assert session.count(Music) == 0
 
 
-def test_delete_item_that_does_not_exist(session: Session, create_table, item: Music):
+def test_delete_item_that_does_not_exist(session, create_table, item):
     with pytest.raises(ItemIsNotPersistedError):
         session.delete(item)

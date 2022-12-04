@@ -1,64 +1,26 @@
 from datetime import datetime
-import os
 import string
 
-from loguru import logger
-
-from database_tools.postgres import Session
-from media_tools.search import Provider
-
-from batch_database_update import models
+from batch_database_update import database
+from batch_database_update import media
 
 
-def _get_and_update_artists(
-    media_provider: Provider,
-    db_session: Session,
-    execution_time: datetime
-):
+def _get_and_update_artists(execution_time: datetime) -> None:
 
-    for query in list(string.ascii_uppercase):
-        artists = media_provider.get_artists(query)
-        logger.debug(f"Artist query '{query}' returned {len(artists)} items.")
-
-        for artist in artists:
-            items = db_session.search(models.Artist, (models.Artist.id == artist.id))
-
-            if not items:
-                db_session.add(
-                    models.Artist(
-                        id=artist.id,
-                        name=artist.name,
-                        n_followers=artist.n_followers,
-                        popularity=artist.popularity,
-                        created_at=execution_time,
-                        updated_at=execution_time
-                    )
-                )
-
-            else:
-                item = items[0]
-                item.name = artist.name
-                item.n_followers = artist.n_followers
-                item.popularity = artist.popularity
-                item.updated_at = execution_time
-                db_session.update(item)
+    artists = media.get_artists(list(string.ascii_uppercase))
+    database.add_artists(artists, execution_time)
 
 
-def run():
+def _get_and_update_tracks(execution_time: datetime) -> None:
+
+    artists_name = [artist.name for artist in database.get_artists()]
+    tracks = media.get_tracks(artists_name)
+    database.add_tracks(tracks, execution_time)
+
+
+def run() -> None:
 
     execution_time = datetime.utcnow()
 
-    media_provider = Provider(
-        client_id=os.environ.get("MEDIA_PROVIDER_CLIENT_ID"),
-        client_secret=os.environ.get("MEDIA_PROVIDER_CLIENT_SECRET")
-    )
-
-    db_session = Session(
-        host=os.environ.get("DATABASE_HOST"),
-        port=os.environ.get("DATABASE_PORT"),
-        username=os.environ.get("DATABASE_USERNAME"),
-        password=os.environ.get("DATABASE_PASSWORD"),
-        database=os.environ.get("DATABASE_NAME"),
-    )
-
-    _get_and_update_artists(media_provider, db_session, execution_time)
+    _get_and_update_artists(execution_time)
+    _get_and_update_tracks(execution_time)

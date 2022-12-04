@@ -14,7 +14,9 @@ migrations-apply-remote: alembic-apply-remote
 
 migrations-revision: alembic-revision docker-compose-stop
 
-test: alembic-apply pytest-integration docker-compose-stop
+test: pytest-unit test-integration
+
+test-integration: alembic-apply pytest-integration docker-compose-stop
 
 test-system:
 	make pytest-system OPTIONS=" \
