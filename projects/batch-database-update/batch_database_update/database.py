@@ -78,7 +78,9 @@ def add_tracks(tracks: List[schemas.Track], execution_time: datetime) -> None:
 
 
 def get_artists(max_items: Optional[int] = None) -> List[models.Artist]:
+
     artists = _session().search(models.Artist)
     if max_items:
         artists = artists[:max_items]
+
     return artists

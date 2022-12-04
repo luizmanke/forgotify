@@ -57,10 +57,26 @@ def populate_tracks(session):
 
 
 @pytest.fixture
+def populate_artists_to_tracks(session):
+
+    execution_time = datetime.utcnow()
+
+    for artist_id in range(2):
+        for track_id in range(10):
+            session.add(
+                models.ArtistToTrack(
+                    artist_id=f"{artist_id}",
+                    track_id=f"{track_id}",
+                    created_at=execution_time
+                )
+            )
+
+
+@pytest.fixture
 def clear_table(session):
     yield
     session._session.query(models.Artist).delete()
-    # session._session.query(models.ArtistToTrack).delete()
+    session._session.query(models.ArtistToTrack).delete()
     session._session.query(models.Track).delete()
 
 
@@ -164,7 +180,13 @@ def test_add_tracks_without_item_in_database(session, fake_tracks, clear_table):
     assert artists_to_tracks_after[0].created_at == execution_time
 
 
-def test_add_tracks_with_item_in_database(session, fake_tracks, populate_tracks, clear_table):
+def test_add_tracks_with_item_in_database(
+    session,
+    fake_tracks,
+    populate_tracks,
+    populate_artists_to_tracks,
+    clear_table
+):
 
     tracks_before = deepcopy(session.search(models.Track))
     assert len(tracks_before) == 10
