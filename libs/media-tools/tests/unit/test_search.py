@@ -51,7 +51,7 @@ def provider(mocker) -> Provider:
     return Provider(client_id="", client_secret="")
 
 
-def test_get_artists_with_no_results(mocker, provider: Provider):
+def test_get_artists_with_no_results(mocker, provider):
 
     mocker.patch(
         "media_tools.search.Provider.search",
@@ -63,7 +63,7 @@ def test_get_artists_with_no_results(mocker, provider: Provider):
     assert len(artists) == 0
 
 
-def test_get_artists_with_some_results(mocker, provider: Provider):
+def test_get_artists_with_some_results(mocker, provider):
 
     mocker.patch(
         "media_tools.search.Provider.search",
@@ -82,7 +82,7 @@ def test_get_artists_with_some_results(mocker, provider: Provider):
     )
 
 
-def test_get_artists_with_too_many_results(mocker, provider: Provider):
+def test_get_artists_with_too_many_results(mocker, provider):
 
     mocker.patch(
         "media_tools.search.Provider.search",
@@ -101,7 +101,7 @@ def test_get_artists_with_too_many_results(mocker, provider: Provider):
     )
 
 
-def test_get_tracks_with_no_results(mocker, provider: Provider):
+def test_get_tracks_with_no_results(mocker, provider):
 
     mocker.patch(
         "media_tools.search.Provider.search",
@@ -113,7 +113,7 @@ def test_get_tracks_with_no_results(mocker, provider: Provider):
     assert len(tracks) == 0
 
 
-def test_get_tracks_with_some_results(mocker, provider: Provider):
+def test_get_tracks_with_some_results(mocker, provider):
 
     mocker.patch(
         "media_tools.search.Provider.search",
@@ -131,7 +131,7 @@ def test_get_tracks_with_some_results(mocker, provider: Provider):
     )
 
 
-def test_get_tracks_with_too_many_results(mocker, provider: Provider):
+def test_get_tracks_with_too_many_results(mocker, provider):
 
     mocker.patch(
         "media_tools.search.Provider.search",
