@@ -10,7 +10,7 @@ medias_password = config.require_secret("database_medias_password")
 
 medias = aws.rds.Instance(
     "medias",
-    allocated_storage=50,
+    allocated_storage=10,
     backup_retention_period=7,
     engine="postgres",
     engine_version="14.2",
