@@ -48,7 +48,7 @@ def test_update_artists(
 
     execution_time = datetime.utcnow()
 
-    main.update_artists(execution_time)
+    main.update_artists()
 
     artists_updated = session.search(models.Artist, models.Artist.updated_at > execution_time)
     assert len(artists_updated) > 0
@@ -62,7 +62,7 @@ def test_update_tracks(
 
     execution_time = datetime.utcnow()
 
-    main.update_tracks(execution_time)
+    main.update_tracks()
 
     tracks_updated = session.search(models.Track, models.Track.updated_at > execution_time)
     assert len(tracks_updated) > 0
