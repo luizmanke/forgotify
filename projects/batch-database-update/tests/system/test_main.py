@@ -40,20 +40,29 @@ def session() -> Session:
     )
 
 
-def test_run(
+def test_update_artists(
     session,
     set_ascii_uppercase_return,
-    limit_media_get_artists_items,
+    limit_media_get_artists_items
+):
+
+    execution_time = datetime.utcnow()
+
+    main.update_artists(execution_time)
+
+    artists_updated = session.search(models.Artist, models.Artist.updated_at > execution_time)
+    assert len(artists_updated) > 0
+
+
+def test_update_tracks(
+    session,
     limit_media_get_tracks_items,
     limit_database_get_artists_items
 ):
 
     execution_time = datetime.utcnow()
 
-    main.run()
-
-    artists_updated = session.search(models.Artist, models.Artist.updated_at > execution_time)
-    assert len(artists_updated) > 0
+    main.update_tracks(execution_time)
 
     tracks_updated = session.search(models.Track, models.Track.updated_at > execution_time)
     assert len(tracks_updated) > 0
