@@ -1,6 +1,7 @@
 from typing import Dict
 
 import pytest
+import requests
 
 from media_tools import schemas
 from media_tools.search import Provider
@@ -101,6 +102,28 @@ def test_get_artists_with_too_many_results(mocker, provider):
     )
 
 
+def test_get_artists_succeeds_after_request_exception(mocker, provider):
+
+    mocker.patch(
+        "media_tools.search.Provider.search",
+        side_effect=[
+            requests.exceptions.ConnectionError(),
+            fake_artists_search(total_samples=10)
+        ]
+    )
+
+    artists = provider.get_artists("some-artist-query")
+
+    assert len(artists) == 10
+    assert artists[0] == schemas.Artist(
+        id="some-id",
+        name="some-name",
+        n_followers=100,
+        genres=["some-genre"],
+        popularity=100.0
+    )
+
+
 def test_get_tracks_with_no_results(mocker, provider):
 
     mocker.patch(
@@ -141,6 +164,27 @@ def test_get_tracks_with_too_many_results(mocker, provider):
     tracks = provider.get_tracks("some-track-query")
 
     assert len(tracks) == 1_000
+    assert tracks[0] == schemas.Track(
+        id="some-id",
+        name="some-name",
+        popularity=100.0,
+        artists_id=["some-artist-id"]
+    )
+
+
+def test_get_tracks_succeeds_after_request_exception(mocker, provider):
+
+    mocker.patch(
+        "media_tools.search.Provider.search",
+        side_effect=[
+            requests.exceptions.ConnectionError(),
+            fake_tracks_search(total_samples=10)
+        ]
+    )
+
+    tracks = provider.get_tracks("some-track-query")
+
+    assert len(tracks) == 10
     assert tracks[0] == schemas.Track(
         id="some-id",
         name="some-name",
