@@ -1,6 +1,8 @@
-from typing import List
+from typing import Dict, List
 
+import backoff
 from loguru import logger
+import requests
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -16,7 +18,11 @@ class Provider(Spotify):
     def __init__(self, client_id: str, client_secret: str) -> None:
         super().__init__(client_credentials_manager=Credentials(client_id, client_secret))
 
-    def _search(self, query: str, type: str, max_items: int = 1_000) -> List[dict]:
+    @backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError)
+    def _search(self, query: str, type: str, max_items: int, offset: int) -> Dict:
+        return self.search(query, type=type, limit=max_items, offset=offset)
+
+    def _search_loop(self, query: str, type: str, max_items: int = 1_000) -> List[dict]:
 
         MAX_ITEMS_PER_REQUEST = 50
         MAX_OFFSET = 1_000
@@ -32,7 +38,7 @@ class Provider(Spotify):
         for offset in range(0, MAX_OFFSET, MAX_ITEMS_PER_REQUEST):
             logger.debug(f"Requesting offset {offset}.")
 
-            response = self.search(query, type=type, limit=MAX_ITEMS_PER_REQUEST, offset=offset)
+            response = self._search(query, type, MAX_ITEMS_PER_REQUEST, offset)
             for item in response[key]["items"]:
                 items.append(item)
 
@@ -46,7 +52,7 @@ class Provider(Spotify):
     def get_artists(self, query: str, max_items: int = 1_000) -> List[schemas.Artist]:
 
         artists = []
-        for item in self._search(query, "artist", max_items):
+        for item in self._search_loop(query, "artist", max_items):
             artists.append(
                 schemas.Artist(
                     id=item["id"],
@@ -62,7 +68,7 @@ class Provider(Spotify):
     def get_tracks(self, artist: str, max_items: int = 1_000) -> List[schemas.Track]:
 
         tracks = []
-        for item in self._search(f"artist:{artist}", "track", max_items):
+        for item in self._search_loop(f"artist:{artist}", "track", max_items):
             tracks.append(
                 schemas.Track(
                     id=item["id"],
