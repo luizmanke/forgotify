@@ -5,27 +5,27 @@ on:
 
 jobs:
 
-  infra:
-    uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
-    with:
-      package_path: infra
+#   infra:
+#     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
+#     with:
+#       package_path: infra
 
-  pipelines:
-    uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
-    with:
-      package_path: pipelines
+#   pipelines:
+#     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
+#     with:
+#       package_path: pipelines
 
-  libs_database_tools:
-    uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
-    with:
-      package_path: libs/database-tools
+#   libs_database_tools:
+#     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
+#     with:
+#       package_path: libs/database-tools
 
-  libs_media_tools:
-    uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
-    with:
-      package_path: libs/media-tools
+#   libs_media_tools:
+#     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
+#     with:
+#       package_path: libs/media-tools
 
-  projects_batch_database_update:
-    uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
-    with:
-      package_path: projects/batch-database-update
+#   projects_batch_database_update:
+#     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
+#     with:
+#       package_path: projects/batch-database-update
