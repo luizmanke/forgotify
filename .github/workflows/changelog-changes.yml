@@ -17,18 +17,6 @@ jobs:
           fetch-depth: 0
           token: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: print logs 1
-        run: |
-          git tag
-
-      - name: Fetch tags
-        run: |
-          git fetch --tags origin
-
-      - name: print logs 2
-        run: |
-          git tag
-
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
