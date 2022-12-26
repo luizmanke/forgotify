@@ -102,6 +102,28 @@ def test_get_artists_with_too_many_results(mocker, provider):
     )
 
 
+def test_get_artists_with_none_results(mocker, provider):
+
+    artists_search = fake_artists_search(total_samples=50)
+    artists_search["artists"]["items"][0:10] = [None] * 10
+
+    mocker.patch(
+        "media_tools.search.Provider.search",
+        return_value=artists_search
+    )
+
+    artists = provider.get_artists("some-artist-query")
+
+    assert len(artists) == 40
+    assert artists[0] == schemas.Artist(
+        id="some-id",
+        name="some-name",
+        n_followers=100,
+        genres=["some-genre"],
+        popularity=100.0
+    )
+
+
 def test_get_artists_succeeds_after_request_exception(mocker, provider):
 
     mocker.patch(
@@ -124,18 +146,6 @@ def test_get_artists_succeeds_after_request_exception(mocker, provider):
     )
 
 
-def test_get_tracks_with_no_results(mocker, provider):
-
-    mocker.patch(
-        "media_tools.search.Provider.search",
-        return_value=fake_tracks_search(total_samples=0)
-    )
-
-    tracks = provider.get_tracks("some-track-query")
-
-    assert len(tracks) == 0
-
-
 def test_get_tracks_with_some_results(mocker, provider):
 
     mocker.patch(
@@ -146,45 +156,6 @@ def test_get_tracks_with_some_results(mocker, provider):
     tracks = provider.get_tracks("some-track-query")
 
     assert len(tracks) == 500
-    assert tracks[0] == schemas.Track(
-        id="some-id",
-        name="some-name",
-        popularity=100.0,
-        artists_id=["some-artist-id"]
-    )
-
-
-def test_get_tracks_with_too_many_results(mocker, provider):
-
-    mocker.patch(
-        "media_tools.search.Provider.search",
-        return_value=fake_tracks_search(total_samples=10_000)
-    )
-
-    tracks = provider.get_tracks("some-track-query")
-
-    assert len(tracks) == 1_000
-    assert tracks[0] == schemas.Track(
-        id="some-id",
-        name="some-name",
-        popularity=100.0,
-        artists_id=["some-artist-id"]
-    )
-
-
-def test_get_tracks_succeeds_after_request_exception(mocker, provider):
-
-    mocker.patch(
-        "media_tools.search.Provider.search",
-        side_effect=[
-            requests.exceptions.ConnectionError(),
-            fake_tracks_search(total_samples=10)
-        ]
-    )
-
-    tracks = provider.get_tracks("some-track-query")
-
-    assert len(tracks) == 10
     assert tracks[0] == schemas.Track(
         id="some-id",
         name="some-name",
