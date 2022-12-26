@@ -1,7 +1,6 @@
 from typing import Dict, List
 
 import backoff
-from loguru import logger
 import requests
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -36,7 +35,6 @@ class Provider(Spotify):
         key = TYPE_TO_RESPONSE_KEY[type]
 
         for offset in range(0, MAX_OFFSET, MAX_ITEMS_PER_REQUEST):
-            logger.debug(f"Requesting offset {offset}.")
 
             response = self._search(query, type, MAX_ITEMS_PER_REQUEST, offset)
             for item in response[key]["items"]:
@@ -47,7 +45,8 @@ class Provider(Spotify):
             if n_items_is_gte_total_results or n_items_is_gte_max_items:
                 break
 
-        return items
+        items_not_none = [item for item in items if item is not None]
+        return items_not_none
 
     def get_artists(self, query: str, max_items: int = 1_000) -> List[schemas.Artist]:
 
