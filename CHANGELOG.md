@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Fix
+
+- Search result with NoneType items (#51)
+
 ## v0.1.0-rc1 (2022-12-18)
 
 ### Feat
