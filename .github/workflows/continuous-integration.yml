@@ -29,3 +29,8 @@ jobs:
     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
     with:
       package_path: projects/batch-database-update
+
+  server:
+    uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
+    with:
+      package_path: projects/server
