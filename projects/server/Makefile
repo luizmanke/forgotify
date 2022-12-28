@@ -13,4 +13,11 @@ test: pytest-unit
 
 shell: docker-shell
 
+server:
+	${DOCKER_RUN} \
+		-p 80:80 \
+			${PROJECT_NAME} uvicorn server.main:app --host 0.0.0.0 --port 80
+
 clean: docker-images-remove
+
+.PHONY: server
