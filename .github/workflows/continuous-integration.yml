@@ -5,12 +5,12 @@ on:
 
 jobs:
 
-  infra:
+  infra_infra:
     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
     with:
       package_path: infra
 
-  pipelines:
+  pipelines_pipelines:
     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
     with:
       package_path: pipelines
@@ -30,7 +30,7 @@ jobs:
     with:
       package_path: projects/batch-database-update
 
-  server:
+  projects_server:
     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
     with:
       package_path: projects/server
