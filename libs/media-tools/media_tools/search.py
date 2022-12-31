@@ -5,7 +5,7 @@ import requests
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 
-from media_tools import schemas
+from media_tools.schemas import Artist, Track
 
 
 class Credentials(SpotifyClientCredentials):
@@ -17,12 +17,12 @@ class Provider(Spotify):
     def __init__(self, client_id: str, client_secret: str) -> None:
         super().__init__(client_credentials_manager=Credentials(client_id, client_secret))
 
-    def get_artists(self, query: str, max_items: int = 1_000) -> List[schemas.Artist]:
+    def get_artists(self, query: str, max_items: int = 1_000) -> List[Artist]:
 
         artists = []
         for item in self._search_loop(query, "artist", max_items):
             artists.append(
-                schemas.Artist(
+                Artist(
                     id=item["id"],
                     name=item["name"],
                     n_followers=item["followers"]["total"],
@@ -33,12 +33,12 @@ class Provider(Spotify):
 
         return artists
 
-    def get_tracks(self, artist: str, max_items: int = 1_000) -> List[schemas.Track]:
+    def get_tracks(self, artist: str, max_items: int = 1_000) -> List[Track]:
 
         tracks = []
         for item in self._search_loop(f"artist:{artist}", "track", max_items):
             tracks.append(
-                schemas.Track(
+                Track(
                     id=item["id"],
                     name=item["name"],
                     popularity=item["popularity"],
