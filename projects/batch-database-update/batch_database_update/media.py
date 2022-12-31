@@ -4,8 +4,8 @@ from typing import List
 
 from loguru import logger
 
+from media_tools import Provider
 from media_tools import schemas
-from media_tools.search import Provider
 
 
 @lru_cache
