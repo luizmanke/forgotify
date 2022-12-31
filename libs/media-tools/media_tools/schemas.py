@@ -11,6 +11,13 @@ class Artist(BaseModel):
     popularity: float
 
 
+class Playlist(BaseModel):
+    id: str
+    name: str
+    description: str
+    url: str
+
+
 class Track(BaseModel):
     id: str
     name: str
