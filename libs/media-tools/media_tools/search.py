@@ -1,11 +1,11 @@
-from typing import Dict, List
+from typing import Callable, Dict, List
 
 import backoff
 import requests
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 
-from media_tools.schemas import Artist, Track
+from media_tools.schemas import Artist, Playlist, Track
 
 
 class Credentials(SpotifyClientCredentials):
@@ -48,26 +48,57 @@ class Provider(Spotify):
 
         return tracks
 
-    def _search_loop(self, query: str, type: str, max_items: int = 1_000) -> List[dict]:
+    def get_playlists(self, user_id: str, max_items: int = 1_000) -> List[Playlist]:
 
-        MAX_ITEMS_PER_REQUEST = 50
-        MAX_OFFSET = 1_000
+        playlists = []
+        for item in self._playlists_loop(user_id, max_items):
+            playlists.append(
+                Playlist(
+                    id=item["id"],
+                    name=item["name"],
+                    description=item["description"],
+                    url=item["external_urls"]["spotify"],
+                )
+            )
+
+        return playlists
+
+    def _search_loop(self, query: str, type: str, max_items: int) -> List[dict]:
+
         TYPE_TO_RESPONSE_KEY = {
             "artist": "artists",
             "track": "tracks"
         }
 
-        offset = 0
-        items = []
         key = TYPE_TO_RESPONSE_KEY[type]
 
+        def request_function(max_items: int, offset: int) -> Dict:
+            response = self._search(query, type, max_items, offset)
+            return response[key]
+
+        return self._request_loop(request_function, max_items)
+
+    def _playlists_loop(self, user_id: str, max_items: int) -> List[dict]:
+
+        def request_function(max_items: int, offset: int) -> Dict:
+            return self._user_playlists(user_id, max_items, offset)
+
+        return self._request_loop(request_function, max_items)
+
+    def _request_loop(self, request_function: Callable, max_items: int) -> List[dict]:
+
+        MAX_ITEMS_PER_REQUEST = 50
+        MAX_OFFSET = 1_000
+
+        offset = 0
+        items = []
         for offset in range(0, MAX_OFFSET, MAX_ITEMS_PER_REQUEST):
 
-            response = self._search(query, type, MAX_ITEMS_PER_REQUEST, offset)
-            for item in response[key]["items"]:
+            response = request_function(MAX_ITEMS_PER_REQUEST, offset)
+            for item in response["items"]:
                 items.append(item)
 
-            n_items_is_gte_total_results = len(items) >= response[key]["total"]
+            n_items_is_gte_total_results = len(items) >= response["total"]
             n_items_is_gte_max_items = len(items) >= max_items
             if n_items_is_gte_total_results or n_items_is_gte_max_items:
                 break
@@ -78,3 +109,7 @@ class Provider(Spotify):
     @backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError)
     def _search(self, query: str, type: str, max_items: int, offset: int) -> Dict:
         return self.search(query, type=type, limit=max_items, offset=offset)
+
+    @backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError)
+    def _user_playlists(self, user_id: str, max_items: int, offset: int) -> Dict:
+        return self.user_playlists(user_id, max_items, offset)
