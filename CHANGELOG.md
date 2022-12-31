@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Feat
+
+- Create media-tools get playlists method (#53)
+
 ### Fix
 
 - Search result with NoneType items (#51)
