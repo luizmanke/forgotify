@@ -3,7 +3,7 @@ from typing import Dict
 import pytest
 import requests
 
-from media_tools import schemas
+from media_tools.schemas import Artist, Playlist, Track
 from media_tools.search import Provider
 
 
@@ -44,6 +44,22 @@ def fake_tracks_search(total_samples: int) -> Dict:
     }
 
 
+def fake_playlists_search(total_samples: int) -> Dict:
+
+    MAX_SAMPLES_PER_SEARCH = 50
+    SAMPLE = {
+        "id": "some-id",
+        "name": "some-name",
+        "description": "some-description",
+        "external_urls": {"spotify": "some-url"}
+    }
+
+    return {
+        "items": [SAMPLE] * min(total_samples, MAX_SAMPLES_PER_SEARCH),
+        "total": total_samples
+    }
+
+
 @pytest.fixture
 def provider(mocker) -> Provider:
 
@@ -74,7 +90,7 @@ def test_get_artists_with_some_results(mocker, provider):
     artists = provider.get_artists("some-artist-query")
 
     assert len(artists) == 500
-    assert artists[0] == schemas.Artist(
+    assert artists[0] == Artist(
         id="some-id",
         name="some-name",
         n_followers=100,
@@ -93,7 +109,7 @@ def test_get_artists_with_too_many_results(mocker, provider):
     artists = provider.get_artists("some-artist-query")
 
     assert len(artists) == 1_000
-    assert artists[0] == schemas.Artist(
+    assert artists[0] == Artist(
         id="some-id",
         name="some-name",
         n_followers=100,
@@ -115,7 +131,7 @@ def test_get_artists_with_none_results(mocker, provider):
     artists = provider.get_artists("some-artist-query")
 
     assert len(artists) == 40
-    assert artists[0] == schemas.Artist(
+    assert artists[0] == Artist(
         id="some-id",
         name="some-name",
         n_followers=100,
@@ -137,7 +153,7 @@ def test_get_artists_succeeds_after_request_exception(mocker, provider):
     artists = provider.get_artists("some-artist-query")
 
     assert len(artists) == 10
-    assert artists[0] == schemas.Artist(
+    assert artists[0] == Artist(
         id="some-id",
         name="some-name",
         n_followers=100,
@@ -156,9 +172,27 @@ def test_get_tracks_with_some_results(mocker, provider):
     tracks = provider.get_tracks("some-track-query")
 
     assert len(tracks) == 500
-    assert tracks[0] == schemas.Track(
+    assert tracks[0] == Track(
         id="some-id",
         name="some-name",
         popularity=100.0,
         artists_id=["some-artist-id"]
+    )
+
+
+def test_get_playlists_with_some_results(mocker, provider):
+
+    mocker.patch(
+        "media_tools.search.Provider.user_playlists",
+        return_value=fake_playlists_search(total_samples=500)
+    )
+
+    playlists = provider.get_playlists("some-user-id")
+
+    assert len(playlists) == 500
+    assert playlists[0] == Playlist(
+        id="some-id",
+        name="some-name",
+        description="some-description",
+        url="some-url"
     )
