@@ -20,7 +20,7 @@ class Provider(Spotify):
     def get_artists(self, query: str, max_items: int = 1_000) -> List[Artist]:
 
         artists = []
-        for item in self._search_loop(query, "artist", max_items):
+        for item in self._request_search(query, "artist", max_items):
             artists.append(
                 Artist(
                     id=item["id"],
@@ -36,7 +36,7 @@ class Provider(Spotify):
     def get_tracks(self, artist: str, max_items: int = 1_000) -> List[Track]:
 
         tracks = []
-        for item in self._search_loop(f"artist:{artist}", "track", max_items):
+        for item in self._request_search(f"artist:{artist}", "track", max_items):
             tracks.append(
                 Track(
                     id=item["id"],
@@ -51,7 +51,7 @@ class Provider(Spotify):
     def get_playlists(self, user_id: str, max_items: int = 1_000) -> List[Playlist]:
 
         playlists = []
-        for item in self._playlists_loop(user_id, max_items):
+        for item in self._request_playlists(user_id, max_items):
             playlists.append(
                 Playlist(
                     id=item["id"],
@@ -63,7 +63,7 @@ class Provider(Spotify):
 
         return playlists
 
-    def _search_loop(self, query: str, type: str, max_items: int) -> List[dict]:
+    def _request_search(self, query: str, type: str, max_items: int) -> List[dict]:
 
         TYPE_TO_RESPONSE_KEY = {
             "artist": "artists",
@@ -78,7 +78,7 @@ class Provider(Spotify):
 
         return self._request_loop(request_function, max_items)
 
-    def _playlists_loop(self, user_id: str, max_items: int) -> List[dict]:
+    def _request_playlists(self, user_id: str, max_items: int) -> List[dict]:
 
         def request_function(max_items: int, offset: int) -> Dict:
             return self._user_playlists(user_id, max_items, offset)
