@@ -15,6 +15,8 @@ shell: docker-shell
 
 server:
 	${DOCKER_RUN} \
+		-e MEDIA_PROVIDER_CLIENT_ID \
+		-e MEDIA_PROVIDER_CLIENT_SECRET \
 		-p 80:80 \
 			${PROJECT_NAME} uvicorn server.main:app --host 0.0.0.0 --port 80
 
