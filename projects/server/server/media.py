@@ -2,6 +2,8 @@ from functools import lru_cache
 from os import environ
 from typing import Dict, List
 
+from loguru import logger
+
 from media_tools import Provider
 
 
@@ -14,4 +16,7 @@ def _provider() -> Provider:
 
 
 def get_playlists(user_id: str) -> List[Dict]:
+
+    logger.debug(f"Request playlists for user_id '{user_id}'.")
+
     return [p.dict() for p in _provider().get_playlists(user_id)]
