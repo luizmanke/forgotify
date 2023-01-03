@@ -16,6 +16,21 @@ Build the docker image:
 make build
 ```
 
+Set the following environment variables in a `.env` file:
+
+> *`MEIDA_PROVIDER` credentials are specified on the [libs/media-tools/](../../libs/media-tools/README.md#requirements) documentation.*
+
+```sh
+MEDIA_PROVIDER_CLIENT_ID=
+MEDIA_PROVIDER_CLIENT_SECRET=
+```
+
+Export the environment variables:
+
+```sh
+export $(cat .env)
+```
+
 Run the server:
 
 > The server will be available on http://0.0.0.0:80.
