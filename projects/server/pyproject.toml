@@ -10,8 +10,10 @@ packages = [{include = "server"}]
 fastapi = "^0.88.0"
 gunicorn = "^20.1.0"
 httpx = "^0.23.1"
+pytest-mock = "^3.10.0"
 python = "^3.9"
 uvicorn = "^0.20.0"
+media-tools = { path = "../../libs/media-tools" }
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"
