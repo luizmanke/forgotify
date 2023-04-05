@@ -6,6 +6,7 @@ Scrape Trigger is a project that aims to start the data collection process.
 
 * [Running locally](#running-locally)
 * [Testing locally](#testing-locally)
+* [Pushing image](#pushing-image)
 * [Cleaning the workspace](#cleaning-the-workspace)
 
 ## Running locally
@@ -40,6 +41,14 @@ Alternatively, the following is an all-in-one command to build, lint and test:
 
 ```sh
 make all
+```
+
+## Pushing image
+
+Push image to the registry:
+
+```sh
+make push
 ```
 
 ## Cleaning the workspace

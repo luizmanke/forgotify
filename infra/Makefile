@@ -4,6 +4,7 @@ include ../makefiles/Pytest.mk
 
 FLAGS := 
 STACK := dev
+AWS_IMAGE_TAG := $(shell git rev-parse --short HEAD)
 
 
 guard-%:
@@ -24,11 +25,13 @@ test: pytest-unit
 shell: docker-shell
 
 up: DOCKER_FLAGS=-it
-up: guard-AWS_ACCESS_KEY_ID guard-AWS_SECRET_ACCESS_KEY guard-AWS_REGION guard-PULUMI_ACCESS_TOKEN
+up: guard-AWS_ACCOUNT_ID guard-AWS_ACCESS_KEY_ID guard-AWS_SECRET_ACCESS_KEY guard-AWS_REGION guard-PULUMI_ACCESS_TOKEN
 	${DOCKER_RUN} ${DOCKER_FLAGS} \
+		-e AWS_ACCOUNT_ID \
 		-e AWS_ACCESS_KEY_ID \
 		-e AWS_SECRET_ACCESS_KEY \
 		-e AWS_REGION \
+		-e AWS_IMAGE_TAG=${AWS_IMAGE_TAG} \
 		-e PULUMI_ACCESS_TOKEN \
 			${PROJECT_NAME} pulumi up --stack ${STACK} ${FLAGS}
 

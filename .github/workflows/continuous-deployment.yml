@@ -12,6 +12,26 @@ concurrency:
 
 jobs:
 
+  push_images:
+    name: Push images
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build
+        run: |
+          make -C projects/scrape-trigger build
+
+      - name: Push
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          make -C projects/scrape-trigger push TAG=${GITHUB_REF_NAME}
+
   update_infra:
     name: Update infra
     runs-on: ubuntu-latest
@@ -28,9 +48,11 @@ jobs:
 
       - name: Update infra
         env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_IMAGE_TAG: ${GITHUB_REF_NAME}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
         run: |
-          make -C infra up STACK=qa FLAGS='--skip-preview' DOCKER_FLAGS=
+          make -C infra up STACK=qa FLAGS='--skip-preview --refresh' DOCKER_FLAGS=
