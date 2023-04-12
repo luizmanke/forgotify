@@ -10,11 +10,6 @@ jobs:
     with:
       package_path: infra
 
-  pipelines:
-    uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
-    with:
-      package_path: pipelines
-
   libs_database_tools:
     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
     with:
@@ -24,8 +19,3 @@ jobs:
     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
     with:
       package_path: libs/media-tools
-
-  projects_batch_database_update:
-    uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
-    with:
-      package_path: projects/batch-database-update
