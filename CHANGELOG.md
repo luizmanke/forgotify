@@ -2,6 +2,7 @@
 
 ### Feat
 
+- Deploy scrape trigger (#65)
 - Create scrape trigger project (#64)
 - Remove database batch update and pipelines (#63)
 - Create media-tools get playlists method (#53)
