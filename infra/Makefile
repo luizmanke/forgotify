@@ -4,7 +4,7 @@ include ../makefiles/Pytest.mk
 
 FLAGS := 
 STACK := dev
-AWS_IMAGE_TAG := $(shell git rev-parse --short HEAD)
+AWS_IMAGE_TAG := dev
 
 
 guard-%:

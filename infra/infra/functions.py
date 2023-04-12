@@ -8,7 +8,7 @@ from infra import roles
 
 account_id = os.environ["AWS_ACCOUNT_ID"]
 region = os.environ["AWS_REGION"]
-image_tag = os.environ.get("AWS_IMAGE_TAG", "dev")
+image_tag = os.environ["AWS_IMAGE_TAG"]
 
 config = pulumi.Config()
 environment = config.require("environment")
