@@ -22,7 +22,11 @@ RUN poetry install --no-root --no-interaction --no-ansi
 # Mount package
 COPY ${PROJECT_PATH}/scrape_trigger/ scrape_trigger/
 
+# Copy entrypoint script
+COPY scripts/aws-lambda-entrypoint.sh aws-lambda-entrypoint.sh
+RUN chmod +x aws-lambda-entrypoint.sh
+
 # Set entrypoint
 WORKDIR /app/scrape_trigger
-ENTRYPOINT [ "aws-lambda-rie", "python", "-m", "awslambdaric" ]
+ENTRYPOINT [ "/app/aws-lambda-entrypoint.sh" ]
 CMD [ "main.run" ]
