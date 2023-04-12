@@ -2,6 +2,7 @@
 
 ### Feat
 
+- Remove database batch update and pipelines (#63)
 - Create media-tools get playlists method (#53)
 
 ### Fix
