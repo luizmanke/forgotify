@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "scrape-trigger"
+version = "0.1.0"
+description = ""
+authors = ["Luiz Felipe Manke <luizmanke@gmail.com>"]
+readme = "README.md"
+packages = [{include = "scrape_trigger"}]
+
+[tool.poetry.dependencies]
+awslambdaric = "^2.0.4"
+python = "^3.9"
+
+[tool.poetry.group.dev.dependencies]
+bandit = "^1.7.4"
+flake8 = "^5.0.4"
+mypy = "^0.971"
+pytest = "^7.1.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

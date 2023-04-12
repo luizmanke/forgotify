@@ -19,3 +19,8 @@ jobs:
     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
     with:
       package_path: libs/media-tools
+
+  projects_scrape_trigger:
+    uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
+    with:
+      package_path: projects/scrape-trigger

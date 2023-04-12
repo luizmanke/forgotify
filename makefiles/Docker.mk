@@ -19,7 +19,7 @@ docker-build:
 		.
 
 docker-shell:
-	${DOCKER_RUN} -it ${PROJECT_NAME} /bin/bash
+	${DOCKER_RUN} -it --entrypoint /bin/bash ${PROJECT_NAME}
 
 docker-compose-shell:
 	${DOCKER_COMPOSE_RUN} ${PROJECT_SERVICE} sh -c "/bin/bash"
