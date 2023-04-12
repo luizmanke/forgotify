@@ -5,9 +5,6 @@ from typing import List
 import boto3
 
 
-SNS_TOPIC_ARN = os.environ["SNS_TOPIC_ARN"]
-
-
 class MissingEventKey(Exception):
     pass
 
@@ -30,7 +27,7 @@ def run(event, context):
 
     for item in search:
         client.publish(
-            TopicArn=SNS_TOPIC_ARN,
+            TopicArn=os.environ["SNS_TOPIC_ARN"],
             MessageStructure="json",
             Message=json.dumps({
                 "search": item
