@@ -40,7 +40,7 @@ sns_publish_policy = aws.iam.Policy(
         ]
     })
 )
-    
+
 aws.iam.RolePolicyAttachment(
     resource_name="lambda-sns-publish",
     role=lambda_sns_role.name,
