@@ -8,6 +8,7 @@ packages = [{include = "scrape_trigger"}]
 
 [tool.poetry.dependencies]
 awslambdaric = "^2.0.4"
+boto3 = "^1.26.111"
 python = "^3.9"
 
 [tool.poetry.group.dev.dependencies]

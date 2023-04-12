@@ -1,4 +1,11 @@
+import json
+import os
 from typing import List
+
+import boto3
+
+
+SNS_TOPIC_ARN = os.environ["SNS_TOPIC_ARN"]
 
 
 class MissingEventKey(Exception):
@@ -18,6 +25,17 @@ def run(event, context):
 
     if not isinstance(search, List):
         raise InvalidKeyType("The 'event' key 'search' must be of type list")
+
+    client = boto3.client("scrape-trigger")
+
+    for item in search:
+        client.publish(
+            TopicArn=SNS_TOPIC_ARN,
+            MessageStructure="json",
+            Message=json.dumps({
+                "search": item
+            }),
+        )
 
     return {
         "status_code": 200,
