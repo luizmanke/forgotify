@@ -7,7 +7,7 @@ PROJECT_NAME := $(shell basename ${PROJECT_DIR})
 REGISTRY_IMAGE := registry
 REGISTRY_URI := ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
 
-TAG := $(shell git rev-parse --short HEAD)
+TAG := dev
 PROJECT_AWS_IMAGE := ${REGISTRY_URI}/${PROJECT_NAME}:${TAG}
 
 DOCKER_RUN := docker run --rm
