@@ -55,6 +55,22 @@ Optionally, the stack and/or Pulumi flags can be passed as arguments:
 make up STACK=dev FLAGS="--skip-preview"
 ```
 
+> *The default stack is dev.*
+
+Destroy remote infrastructure, which accepts the same arguments as the *up* command:
+
+```sh
+make destroy FLAGS="--target **scrape-trigger"
+```
+
+> *For more flags options, read Pulumi's [up command](https://www.pulumi.com/docs/reference/cli/pulumi_up) and [destroy command](https://www.pulumi.com/docs/reference/cli/pulumi_destroy).*
+
+Recreate a resource (destroy + up):
+
+```sh
+make recreate FLAGS="--target **scrape-trigger"
+```
+
 Optionally, run bash within the docker image:
 
 ```sh
