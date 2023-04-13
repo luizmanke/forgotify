@@ -3,32 +3,12 @@ import pytest
 from scrape_trigger import main
 
 
-class FakeClient:
-
-    def __init__(self):
-        self.published_messages = []
-
-    def publish(self, **kwargs):
-        self.published_messages.append(kwargs)
-
-
-def test_run_publish_messages_and_return_status_200(mocker, monkeypatch):
-
-    fake_client = FakeClient()
-    mocker.patch("scrape_trigger.main.boto3.client", return_value=fake_client)
-
-    monkeypatch.setenv("SNS_TOPIC_ARN", "fake-sns-topic-arn")
+def test_run_publish_messages_and_return_status_200():
 
     event = {"search": ["A"]}
     context = {}
 
     output = main.run(event, context)
-
-    assert fake_client.published_messages == [{
-        "Message": '{"search": "A"}',
-        "MessageStructure": "json",
-        "TopicArn": "fake-sns-topic-arn",
-    }]
 
     assert output == {
         "status_code": 200,

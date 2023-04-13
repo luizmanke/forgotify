@@ -10,9 +10,11 @@ build: docker-build
 
 lint: lint-flake8 lint-mypy lint-bandit
 
-test: pytest-unit
+test: pytest-integration-wait stop
 
 shell: docker-shell
+
+stop: docker-compose-stop
 
 push: registry-create registry-push
 

@@ -23,12 +23,11 @@ def run(event, context):
     if not isinstance(search, List):
         raise InvalidKeyType("The 'event' key 'search' must be of type list")
 
-    client = boto3.client("scrape-trigger")
+    sns = boto3.client("sns", endpoint_url=os.environ.get("SNS_ENDPOINT_URL"))
 
     for item in search:
-        client.publish(
+        sns.publish(
             TopicArn=os.environ["SNS_TOPIC_ARN"],
-            MessageStructure="json",
             Message=json.dumps({
                 "search": item
             }),
