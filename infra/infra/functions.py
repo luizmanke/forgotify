@@ -27,5 +27,5 @@ aws.lambda_.Function(
     name=f"scrape-trigger-{environment}",
     package_type="Image",
     role=roles.lambda_sns_role.arn,
-    timeout=180
+    timeout=60
 )

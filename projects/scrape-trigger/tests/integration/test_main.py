@@ -8,7 +8,7 @@ import boto3
 from scrape_trigger import main
 
 
-class MessageBroker:
+class Broker:
 
     def __init__(self):
 
@@ -39,18 +39,18 @@ class MessageBroker:
 
 
 @pytest.fixture
-def message_broker():
-    return MessageBroker()
+def broker():
+    return Broker()
 
 
-def test_run_should_publish_messages_and_return_status_code_200(message_broker):
+def test_run_should_publish_messages_and_return_status_code_200(broker):
 
     event = {"search": ["A"]}
     context = {}
 
     output = main.run(event, context)
 
-    assert '{"search": "A"}' in message_broker.messages
+    assert '{"search": "A"}' in broker.messages
 
     assert output == {
         "status_code": 200,
