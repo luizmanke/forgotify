@@ -9,10 +9,10 @@ DOCKER_RUN := docker run --rm
 
 
 lint-flake8:
-	${DOCKER_RUN} ${DOCKER_WORKDIR} ${TEST_VOLUME} --entrypoint flake8 ${PROJECT_NAME} --max-line-length 120
+	${DOCKER_RUN} ${DOCKER_WORKDIR} ${TEST_VOLUME} --entrypoint flake8 ${PROJECT_NAME} ${TEST_FOLDER} --max-line-length 120
 
 lint-mypy:
-	${DOCKER_RUN} ${DOCKER_WORKDIR} ${TEST_VOLUME} --entrypoint mypy ${PROJECT_NAME} . --ignore-missing-imports
+	${DOCKER_RUN} ${DOCKER_WORKDIR} ${TEST_VOLUME} --entrypoint mypy ${PROJECT_NAME} ${TEST_FOLDER} --ignore-missing-imports
 
 lint-bandit:
 	${DOCKER_RUN} ${DOCKER_WORKDIR} ${TEST_VOLUME} --entrypoint bandit ${PROJECT_NAME} .
