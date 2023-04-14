@@ -3,7 +3,10 @@ import os
 import pulumi
 import pulumi_aws as aws
 
-from infra import roles
+from infra import (
+    roles,
+    topics
+)
 
 
 account_id = os.environ["AWS_ACCOUNT_ID"]
@@ -15,6 +18,11 @@ environment = config.require("environment")
 
 aws.lambda_.Function(
     "scrape-trigger",
+    environment={
+        "variables": {
+            "SNS_TOPIC_ARN": topics.scrape_artist_topic.arn
+        },
+    },
     image_uri=f"{account_id}.dkr.ecr.{region}.amazonaws.com/scrape-trigger:{image_tag}",
     name=f"scrape-trigger-{environment}",
     package_type="Image",

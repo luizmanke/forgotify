@@ -35,4 +35,14 @@ up: guard-AWS_ACCOUNT_ID guard-AWS_ACCESS_KEY_ID guard-AWS_SECRET_ACCESS_KEY gua
 		-e PULUMI_ACCESS_TOKEN \
 			${PROJECT_NAME} pulumi up --stack ${STACK} ${FLAGS}
 
+destroy: guard-AWS_ACCESS_KEY_ID guard-AWS_SECRET_ACCESS_KEY guard-AWS_REGION guard-PULUMI_ACCESS_TOKEN
+	${DOCKER_RUN} -it \
+		-e AWS_ACCESS_KEY_ID \
+		-e AWS_SECRET_ACCESS_KEY \
+		-e AWS_REGION \
+		-e PULUMI_ACCESS_TOKEN \
+			${PROJECT_NAME} pulumi destroy --stack ${STACK} ${FLAGS}
+
+recreate: destroy up
+
 clean: docker-images-remove

@@ -17,10 +17,10 @@ pytest-unit:
 	${DOCKER_RUN} ${DOCKER_WORKDIR} ${TEST_VOLUME} --entrypoint ${TEST_CMD} ${PROJECT_NAME} ${TEST_FOLDER}/unit ${TEST_VERBOSE}
 
 pytest-integration:
-	${DOCKER_COMPOSE_RUN} ${TEST_VOLUME} ${PROJECT_SERVICE} sh -c "${TEST_CMD} ${TEST_FOLDER}/integration ${TEST_VERBOSE}"
+	${DOCKER_COMPOSE_RUN} ${DOCKER_WORKDIR} ${TEST_VOLUME} --entrypoint sh ${PROJECT_SERVICE} -c "${TEST_CMD} ${TEST_FOLDER}/integration ${TEST_VERBOSE}"
 
 pytest-integration-wait:
-	${DOCKER_COMPOSE_RUN} ${TEST_VOLUME} ${PROJECT_SERVICE} sh -c "/wait && ${TEST_CMD} ${TEST_FOLDER}/integration ${TEST_VERBOSE}"
+	${DOCKER_COMPOSE_RUN} ${DOCKER_WORKDIR} ${TEST_VOLUME} --entrypoint sh ${PROJECT_SERVICE} -c "/wait && ${TEST_CMD} ${TEST_FOLDER}/integration ${TEST_VERBOSE}"
 
 pytest-system: OPTIONS=
 pytest-system:
