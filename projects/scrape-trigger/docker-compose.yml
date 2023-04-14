@@ -11,7 +11,30 @@ services:
     image: amazon/aws-cli:2.11.12
     entrypoint: /bin/sh -c
     command: >
-      "aws sns create-topic --name scrape-artirst --endpoint-url http://infra:4566"
+      "
+        # Create SNS topic
+        aws sns create-topic \
+          --name scrape-artirst \
+          --endpoint-url http://infra:4566
+
+        # Create SQS queue
+        aws sqs create-queue \
+          --queue-name test-queue \
+          --endpoint-url=http://infra:4566
+
+        # Subscribe queue to topic
+        aws sns subscribe \
+          --topic-arn arn:aws:sns:sa-east-1:000000000000:scrape-artirst \
+          --protocol sqs \
+          --notification-endpoint arn:aws:sqs:sa-east-1:000000000000:test-queue \
+          --endpoint-url=http://infra:4566
+
+        # Trigger queue
+        aws sns publish \
+          --topic-arn arn:aws:sns:sa-east-1:000000000000:scrape-artirst \
+          --message 'Trigger message' \
+          --endpoint-url http://infra:4566
+      "
     environment:
       - AWS_ACCESS_KEY_ID=fake-id
       - AWS_SECRET_ACCESS_KEY=fake-secret
@@ -23,11 +46,11 @@ services:
     image: scrape-trigger:latest
     environment:
       - WAIT_HOSTS=infra:4566
-      - WAIT_AFTER=5
+      - WAIT_AFTER=5  # wait until setup service is finished
       - AWS_ACCESS_KEY_ID=fake-id
       - AWS_SECRET_ACCESS_KEY=fake-secret
       - AWS_DEFAULT_REGION=sa-east-1
-      - SNS_ENDPOINT_URL=http://infra:4566
+      - INFRA_ENDPOINT_URL=http://infra:4566
       - SNS_TOPIC_ARN=arn:aws:sns:sa-east-1:000000000000:scrape-artirst
     depends_on:
       - setup

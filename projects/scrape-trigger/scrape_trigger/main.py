@@ -23,7 +23,10 @@ def run(event, context):
     if not isinstance(search, List):
         raise InvalidKeyType("The 'event' key 'search' must be of type list")
 
-    sns = boto3.client("sns", endpoint_url=os.environ.get("SNS_ENDPOINT_URL"))
+    sns = boto3.client(
+        service_name="sns",
+        endpoint_url=os.environ.get("INFRA_ENDPOINT_URL")
+    )
 
     for item in search:
         sns.publish(

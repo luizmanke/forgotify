@@ -1,14 +1,56 @@
+import json
+import os
 import pytest
+from typing import List
+
+import boto3
 
 from scrape_trigger import main
 
 
-def test_run_publish_messages_and_return_status_200():
+class MessageBroker:
+
+    def __init__(self):
+
+        self._sqs = boto3.client(
+            service_name="sqs",
+            endpoint_url=os.environ["INFRA_ENDPOINT_URL"]
+        )
+
+        self._queue = self._sqs.get_queue_url(QueueName="test-queue")
+
+    @property
+    def messages(self) -> List:
+
+        response = self._sqs.receive_message(
+            QueueUrl=self._queue["QueueUrl"],
+            MaxNumberOfMessages=10
+        )
+
+        if "Messages" not in response:
+            return []
+
+        messages = []
+        for item in response["Messages"]:
+            body = json.loads(item["Body"])
+            messages.append(body["Message"])
+
+        return messages
+
+
+@pytest.fixture
+def message_broker():
+    return MessageBroker()
+
+
+def test_run_should_publish_messages_and_return_status_code_200(message_broker):
 
     event = {"search": ["A"]}
     context = {}
 
     output = main.run(event, context)
+
+    assert '{"search": "A"}' in message_broker.messages
 
     assert output == {
         "status_code": 200,
