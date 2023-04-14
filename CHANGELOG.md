@@ -2,6 +2,7 @@
 
 ### Feat
 
+- Publish trigger messages to topic (#70)
 - Create scrape-artist topic (#69)
 - Deploy scrape trigger (#65)
 - Create scrape trigger project (#64)
