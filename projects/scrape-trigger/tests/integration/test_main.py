@@ -74,3 +74,14 @@ def test_run_should_raise_if_event_search_key_is_not_list():
 
     with pytest.raises(main.InvalidKeyType):
         main.run(event, context)
+
+
+def test_run_should_raise_if_publish_fails(monkeypatch):
+
+    monkeypatch.setenv("SNS_TOPIC_ARN", "wrong-topic-arn")
+
+    event = {"search": ["A"]}
+    context = {}
+
+    with pytest.raises(main.PublishError):
+        main.run(event, context)
