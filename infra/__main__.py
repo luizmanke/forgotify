@@ -1,3 +1,4 @@
 from infra import (  # noqa
-    functions
+    functions,
+    triggers
 )

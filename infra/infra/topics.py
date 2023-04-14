@@ -6,6 +6,6 @@ config = pulumi.Config()
 environment = config.require("environment")
 
 scrape_artist_topic = aws.sns.Topic(
-    "scrape-artist",
+    resource_name="scrape-artist",
     name=f"scrape-artist-{environment}"
 )
