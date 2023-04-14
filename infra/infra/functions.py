@@ -16,8 +16,8 @@ image_tag = os.environ["AWS_IMAGE_TAG"]
 config = pulumi.Config()
 environment = config.require("environment")
 
-aws.lambda_.Function(
-    "scrape-trigger",
+scrape_trigger_function = aws.lambda_.Function(
+    resource_name="scrape-trigger",
     environment={
         "variables": {
             "SNS_TOPIC_ARN": topics.scrape_artist_topic.arn
