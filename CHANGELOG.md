@@ -14,6 +14,10 @@
 
 - Search result with NoneType items (#51)
 
+### Refactor
+
+- Scrape trigger (#73)
+
 ## v0.1.0-rc1 (2022-12-18)
 
 ### Feat
