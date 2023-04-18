@@ -20,7 +20,7 @@ scrape_trigger_function = aws.lambda_.Function(
     resource_name="scrape-trigger",
     environment={
         "variables": {
-            "SNS_TOPIC_ARN": topics.scrape_artist_topic.arn
+            "QUEUE_TOPIC_ARN": topics.query_triggered_topic.arn
         },
     },
     image_uri=f"{account_id}.dkr.ecr.{region}.amazonaws.com/scrape-trigger:{image_tag}",

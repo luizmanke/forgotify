@@ -5,7 +5,7 @@ import pulumi_aws as aws
 config = pulumi.Config()
 environment = config.require("environment")
 
-scrape_artist_topic = aws.sns.Topic(
-    resource_name="scrape-artist",
-    name=f"scrape-artist-{environment}"
+query_triggered_topic = aws.sns.Topic(
+    resource_name="query-triggered",
+    name=f"query-triggered-{environment}"
 )

@@ -1,14 +1,14 @@
 import json
 import os
-import pytest
-from typing import List
+from typing import Dict, List
 
 import boto3
+import pytest
 
 from scrape_trigger import main
 
 
-class Broker:
+class FakeQueue:
 
     def __init__(self):
 
@@ -19,6 +19,9 @@ class Broker:
 
         self._queue = self._sqs.get_queue_url(QueueName="test-queue")
 
+    def contains(self, message: Dict) -> bool:
+        return message in self.messages
+
     @property
     def messages(self) -> List:
 
@@ -27,35 +30,29 @@ class Broker:
             MaxNumberOfMessages=10
         )
 
-        if "Messages" not in response:
-            return []
-
         messages = []
         for item in response["Messages"]:
             body = json.loads(item["Body"])
-            messages.append(body["Message"])
+            message = json.loads(body["Message"])
+            messages.append(message)
 
         return messages
 
 
 @pytest.fixture
-def broker():
-    return Broker()
+def queue():
+    return FakeQueue()
 
 
-def test_run_should_publish_messages_and_return_status_code_200(broker):
+def test_run_should_publish_messages(queue):
 
-    event = {"search": ["A"]}
+    event = {"queries": ["A"]}
     context = {}
 
     output = main.run(event, context)
 
-    assert '{"search": "A"}' in broker.messages
-
-    assert output == {
-        "status_code": 200,
-        "search": ["A"]
-    }
+    assert output == {"status_code": 200}
+    assert queue.contains({"query": "A"})
 
 
 def test_run_should_raise_if_event_does_not_contain_search_key():
@@ -69,19 +66,36 @@ def test_run_should_raise_if_event_does_not_contain_search_key():
 
 def test_run_should_raise_if_event_search_key_is_not_list():
 
-    event = {"search": "A"}
+    event = {"queries": "A"}
     context = {}
 
     with pytest.raises(main.InvalidKeyType):
         main.run(event, context)
 
 
-def test_run_should_raise_if_publish_fails(monkeypatch):
+@pytest.mark.parametrize(
+    "env_var",
+    [
+        "QUEUE_TOPIC_ARN"
+    ]
+)
+def test_run_should_raise_if_environment_variable_is_missing(monkeypatch, env_var):
 
-    monkeypatch.setenv("SNS_TOPIC_ARN", "wrong-topic-arn")
+    monkeypatch.delenv(env_var)
 
-    event = {"search": ["A"]}
+    event = {"queries": ["A"]}
     context = {}
 
-    with pytest.raises(main.PublishError):
+    with pytest.raises(main.MissingEnvVar):
+        main.run(event, context)
+
+
+def test_run_should_raise_if_publish_message_fails(monkeypatch):
+
+    monkeypatch.setenv("QUEUE_TOPIC_ARN", "wrong-topic-arn")
+
+    event = {"queries": ["A"]}
+    context = {}
+
+    with pytest.raises(main.PublishMessageError):
         main.run(event, context)
