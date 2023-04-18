@@ -104,7 +104,7 @@ def _save_to_storage(
         except Exception as error:
             raise SaveToStorageError(error)
 
-    logger.info(f"{len(artists)} artists saved to storage")
+    logger.info(f"Artists saved to bucket '{bucket_name}'")
 
 
 def _publish_to_topic(
@@ -132,7 +132,7 @@ def _publish_to_topic(
         except Exception as error:
             raise PublishMessageError(error)
 
-        logger.info(f"Message published to topic '{queue_topic_arn}': {message}")
+    logger.info(f"Messages published to topic '{queue_topic_arn}'")
 
 
 class InvalidKeyType(Exception):
