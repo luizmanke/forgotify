@@ -16,6 +16,29 @@ services:
         aws s3api create-bucket \
           --bucket test-bucket \
           --endpoint-url http://infra:4566
+
+        # Create SNS topic
+        aws sns create-topic \
+          --name artist-updated \
+          --endpoint-url http://infra:4566
+
+        # Create SQS queue
+        aws sqs create-queue \
+          --queue-name test-queue \
+          --endpoint-url=http://infra:4566
+
+        # Subscribe queue to topic
+        aws sns subscribe \
+          --topic-arn arn:aws:sns:us-east-1:000000000000:artist-updated \
+          --protocol sqs \
+          --notification-endpoint arn:aws:sqs:us-east-1:000000000000:test-queue \
+          --endpoint-url=http://infra:4566
+
+        # Trigger queue
+        aws sns publish \
+          --topic-arn arn:aws:sns:us-east-1:000000000000:artist-updated \
+          --message '{\"message\": \"test\"}' \
+          --endpoint-url http://infra:4566
       "
     environment:
       - AWS_ACCESS_KEY_ID=fake-id
@@ -34,6 +57,7 @@ services:
       - INFRA_ENDPOINT_URL=http://infra:4566
       - MEDIA_CLIENT_ID=fake-id
       - MEDIA_CLIENT_SECRET=fake-secret
+      - QUEUE_TOPIC_ARN=arn:aws:sns:us-east-1:000000000000:artist-updated
       - WAIT_HOSTS=infra:4566
       - WAIT_AFTER=5  # wait until setup service is finished
     depends_on:

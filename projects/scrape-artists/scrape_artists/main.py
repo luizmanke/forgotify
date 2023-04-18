@@ -26,6 +26,12 @@ def run(event: Dict, context: Any):
         infra_endpoint_url=os.environ.get("INFRA_ENDPOINT_URL")
     )
 
+    _publish_to_topic(
+        artists,
+        queue_topic_arn=os.environ["QUEUE_TOPIC_ARN"],
+        infra_endpoint_url=os.environ.get("INFRA_ENDPOINT_URL")
+    )
+
     return {
         "status_code": 200
     }
@@ -36,6 +42,7 @@ def _check_inputs(event: Dict):
     bucket_name = os.environ.get("BUCKET_NAME")
     media_client_id = os.environ.get("MEDIA_CLIENT_ID")
     media_client_secret = os.environ.get("MEDIA_CLIENT_SECRET")
+    queue_topic_arn = os.environ.get("QUEUE_TOPIC_ARN")
     query = event.get("query")
 
     if not bucket_name:
@@ -46,6 +53,9 @@ def _check_inputs(event: Dict):
 
     if not media_client_secret:
         raise MissingEnvVar("The 'MEDIA_CLIENT_SECRET' environment variable is missing")
+
+    if not queue_topic_arn:
+        raise MissingEnvVar("The 'QUEUE_TOPIC_ARN' environment variable is missing")
 
     if not query:
         raise MissingEventKey("The 'event' argument is missing the 'query' key")
@@ -97,6 +107,34 @@ def _save_to_storage(
     logger.info(f"{len(artists)} artists saved to storage")
 
 
+def _publish_to_topic(
+    artists: List[Artist],
+    queue_topic_arn: str,
+    infra_endpoint_url: Optional[str]
+):
+
+    queue = boto3.client(
+        service_name="sns",
+        endpoint_url=infra_endpoint_url
+    )
+
+    for artist in artists:
+
+        message = json.dumps({
+            "artist": artist.name
+        })
+
+        try:
+            queue.publish(
+                TopicArn=queue_topic_arn,
+                Message=message,
+            )
+        except Exception as error:
+            raise PublishMessageError(error)
+
+        logger.info(f"Message published to topic '{queue_topic_arn}': {message}")
+
+
 class InvalidKeyType(Exception):
     pass
 
@@ -110,4 +148,8 @@ class MissingEnvVar(Exception):
 
 
 class SaveToStorageError(Exception):
+    pass
+
+
+class PublishMessageError(Exception):
     pass
