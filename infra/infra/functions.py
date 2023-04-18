@@ -49,3 +49,10 @@ scrape_artists_function = aws.lambda_.Function(
     role=roles.scrape_artists_role.arn,
     timeout=300
 )
+
+aws.sns.TopicSubscription(
+    resource_name="query-triggered-scrape-artist",
+    topic=topics.query_triggered_topic.arn,
+    protocol="lambda",
+    endpoint=scrape_artists_function.arn
+)

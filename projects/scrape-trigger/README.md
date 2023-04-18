@@ -53,6 +53,12 @@ make push
 
 ## Cleaning the workspace
 
+Ensure the server is not running:
+
+```sh
+make stop
+```
+
 Remove the docker image:
 
 ```sh
