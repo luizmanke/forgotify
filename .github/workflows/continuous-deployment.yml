@@ -22,6 +22,7 @@ jobs:
 
       - name: Build
         run: |
+          make -C projects/scrape-artists build
           make -C projects/scrape-trigger build
 
       - name: Push
@@ -31,6 +32,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
+          make -C projects/scrape-artists push TAG=${GITHUB_REF_NAME}
           make -C projects/scrape-trigger push TAG=${GITHUB_REF_NAME}
 
   update_infra:
