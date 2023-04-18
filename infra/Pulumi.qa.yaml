@@ -1,2 +1,6 @@
 config:
   forgotify:environment: qa
+  forgotify:media_client_id:
+    secure: AAABANvnPOw9ZlR7LWszj2gTLqDjGnrwr6I1SOFTw7AOww5fwkHIY8NpDCqvobu2DWCSW+YT8h5rlElJFHXfvQ==
+  forgotify:media_client_secret:
+    secure: AAABAHOdxj9OLjGdImECMCFID7Sk2qJQ3z5uB4U/fk3oe3nFusI8jcqFsRTAiPHrwDsn+v4yxDphOfebrl7RZg==
