@@ -16,6 +16,7 @@ media-tools = { path = "../../libs/media-tools" }
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"
 flake8 = "^5.0.4"
+freezegun = "^1.2.2"
 mypy = "^0.971"
 pytest = "^7.1.3"
 pytest-mock = "^3.10.0"
