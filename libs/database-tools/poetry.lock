@@ -29,7 +29,7 @@ name = "boto3"
 version = "1.26.115"
 description = "The AWS SDK for Python"
 category = "main"
-optional = false
+optional = true
 python-versions = ">= 3.7"
 files = [
     {file = "boto3-1.26.115-py3-none-any.whl", hash = "sha256:deb53ad15ff0e75ae0be6d7115a2d34e4bafb0541484485f0feb61dabdfb5513"},
@@ -49,7 +49,7 @@ name = "botocore"
 version = "1.29.115"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
-optional = false
+optional = true
 python-versions = ">= 3.7"
 files = [
     {file = "botocore-1.29.115-py3-none-any.whl", hash = "sha256:dff327977d7c9f98f2dc54b51b8f70326952dd50ae23b885fdfa8bfeec014b76"},
@@ -143,7 +143,7 @@ name = "greenlet"
 version = "2.0.2"
 description = "Lightweight in-process concurrent programming"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 files = [
     {file = "greenlet-2.0.2-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:bdfea8c661e80d3c1c99ad7c3ff74e6e87184895bbaca6ee8cc61209f8b9b85d"},
@@ -229,7 +229,7 @@ name = "jmespath"
 version = "1.0.1"
 description = "JSON Matching Expressions"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.7"
 files = [
     {file = "jmespath-1.0.1-py3-none-any.whl", hash = "sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980"},
@@ -385,7 +385,7 @@ name = "psycopg2"
 version = "2.9.6"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6"
 files = [
     {file = "psycopg2-2.9.6-cp310-cp310-win32.whl", hash = "sha256:f7a7a5ee78ba7dc74265ba69e010ae89dae635eea0e97b055fb641a01a31d2b1"},
@@ -470,7 +470,7 @@ name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
 category = "main"
-optional = false
+optional = true
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 files = [
     {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
@@ -554,7 +554,7 @@ name = "s3transfer"
 version = "0.6.0"
 description = "An Amazon S3 Transfer Manager"
 category = "main"
-optional = false
+optional = true
 python-versions = ">= 3.7"
 files = [
     {file = "s3transfer-0.6.0-py3-none-any.whl", hash = "sha256:06176b74f3a15f61f1b4f25a1fc29a4429040b7647133a463da8fa5bd28d5ecd"},
@@ -572,7 +572,7 @@ name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 files = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
@@ -596,7 +596,7 @@ name = "sqlalchemy"
 version = "1.4.47"
 description = "Database Abstraction Library"
 category = "main"
-optional = false
+optional = true
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,>=2.7"
 files = [
     {file = "SQLAlchemy-1.4.47-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:dcfb480bfc9e1fab726003ae00a6bfc67a29bad275b63a4e36d17fe7f13a624e"},
@@ -726,7 +726,7 @@ name = "urllib3"
 version = "1.26.15"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 files = [
     {file = "urllib3-1.26.15-py2.py3-none-any.whl", hash = "sha256:aa751d169e23c7479ce47a0cb0da579e3ede798f994f5816a74e4f4500dcea42"},
@@ -738,7 +738,11 @@ brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)", "brotlipy (>=0.6.0)"]
 secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "ipaddress", "pyOpenSSL (>=0.14)", "urllib3-secure-extra"]
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
+[extras]
+postgres = ["SQLAlchemy", "psycopg2"]
+storage = ["boto3"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "79c3c0d9ab28e264dc7ed1e75fa81b5dc040cf0627d6c773fda6e90b5c499b8a"
+content-hash = "a4ddaefbf76d38e34a4f224503da65c91d69ab258b65b28876a4725886639a66"
