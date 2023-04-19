@@ -10,6 +10,11 @@ jobs:
     with:
       package_path: infra
 
+  libs_cloud_tools:
+    uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
+    with:
+      package_path: libs/cloud-tools
+
   libs_database_tools:
     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
     with:
