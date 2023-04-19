@@ -1,2 +1,6 @@
 config:
   forgotify:environment: dev
+  forgotify:media_client_id:
+    secure: AAABABpZSNVunAtj+z89xbiZqa2ZwoD9nh/vzyIhw3+muW7R57LpI0M/8DTYIgIsvkchfF1bF/hEwdHEVxYZeg==
+  forgotify:media_client_secret:
+    secure: AAABAB7z90kyY/l5cYB9Sobsk8nEvHJKB42O9uz2fMndHCCLa0GUaWj82wZFefckNmgDFhCXHLoX/j+HSFlKDg==

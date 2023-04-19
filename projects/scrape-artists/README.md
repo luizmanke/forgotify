@@ -1,6 +1,6 @@
-# Scrape Trigger
+# Scrape Artists
 
-Scrape Trigger is a project that aims to start the data collection process.
+Scrape Artists is a project that aims to collect artists' information.
 
 ## Topics
 

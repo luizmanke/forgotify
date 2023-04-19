@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+
+  infra:
+    image: localstack/localstack:2.0.1
+    expose:
+      - 4566
+
+  setup:
+    image: amazon/aws-cli:2.11.12
+    entrypoint: /bin/sh -c
+    command: >
+      "
+        # Create bucket
+        aws s3api create-bucket \
+          --bucket test-bucket \
+          --endpoint-url http://infra:4566
+
+        # Create SNS topic
+        aws sns create-topic \
+          --name artist-updated \
+          --endpoint-url http://infra:4566
+
+        # Create SQS queue
+        aws sqs create-queue \
+          --queue-name test-queue \
+          --endpoint-url=http://infra:4566
+
+        # Subscribe queue to topic
+        aws sns subscribe \
+          --topic-arn arn:aws:sns:us-east-1:000000000000:artist-updated \
+          --protocol sqs \
+          --notification-endpoint arn:aws:sqs:us-east-1:000000000000:test-queue \
+          --endpoint-url=http://infra:4566
+
+        # Trigger queue
+        aws sns publish \
+          --topic-arn arn:aws:sns:us-east-1:000000000000:artist-updated \
+          --message '{\"message\": \"test\"}' \
+          --endpoint-url http://infra:4566
+      "
+    environment:
+      - AWS_ACCESS_KEY_ID=fake-id
+      - AWS_SECRET_ACCESS_KEY=fake-secret
+      - AWS_DEFAULT_REGION=us-east-1
+    depends_on:
+      - infra
+
+  scrape_artists:
+    image: scrape-artists:latest
+    environment:
+      - AWS_ACCESS_KEY_ID=fake-id
+      - AWS_SECRET_ACCESS_KEY=fake-secret
+      - AWS_DEFAULT_REGION=us-east-1
+      - BUCKET_NAME=test-bucket
+      - INFRA_ENDPOINT_URL=http://infra:4566
+      - MEDIA_CLIENT_ID=fake-id
+      - MEDIA_CLIENT_SECRET=fake-secret
+      - QUEUE_TOPIC_ARN=arn:aws:sns:us-east-1:000000000000:artist-updated
+      - WAIT_AFTER=10  # wait until setup service is finished
+      - WAIT_HOSTS=infra:4566
+    depends_on:
+      - setup

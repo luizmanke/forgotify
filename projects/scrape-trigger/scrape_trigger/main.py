@@ -61,7 +61,7 @@ def _publish_to_topic(
         except Exception as error:
             raise PublishMessageError(error)
 
-        logger.info(f"Message published to topic '{queue_topic_arn}': {message}")
+    logger.info(f"{len(queries)} messages published to topic '{queue_topic_arn}'")
 
 
 class InvalidKeyType(Exception):

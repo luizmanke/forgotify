@@ -5,7 +5,7 @@ PROJECT_SERVICE := $(subst -,_,${PROJECT_NAME})
 TEST_FOLDER := tests
 TEST_VOLUME := -v ${PROJECT_DIR}/${TEST_FOLDER}:/app/${TEST_FOLDER}
 TEST_CMD := pytest
-TEST_VERBOSE := -v
+TEST_VERBOSE := -vv
 
 DOCKER_WORKDIR := --workdir /app
 DOCKER_RUN := docker run --rm
