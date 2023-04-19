@@ -7,8 +7,9 @@ readme = "README.md"
 packages = [{include = "database_tools"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+boto3 = "^1.26.115"
 psycopg2 = "^2.9.3"
+python = "^3.9"
 SQLAlchemy = "^1.4.41"
 
 [tool.poetry.group.dev.dependencies]
