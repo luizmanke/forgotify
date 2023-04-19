@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional
 import boto3
 from loguru import logger
 
+from database_tools.storage import Bucket
 from media_tools.schemas import Artist
 from media_tools.search import Provider
 
@@ -88,18 +89,16 @@ def _save_to_storage(
 ):
     current_time = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
 
-    storage = boto3.client(
-        service_name="s3",
-        endpoint_url=infra_endpoint_url
+    bucket = Bucket(
+        bucket_name,
+        infra_endpoint_url
     )
 
     for artist in artists:
-
         try:
-            storage.put_object(
-                Body=json.dumps(artist.dict()),
-                Bucket=bucket_name,
-                Key=f"{current_time}/{artist.id}.json"
+            bucket.put_json(
+                data=artist.dict(),
+                file_path=f"{current_time}/{artist.id}.json"
             )
         except Exception as error:
             raise SaveToStorageError(error)

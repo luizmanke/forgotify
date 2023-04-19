@@ -6,6 +6,8 @@ import boto3
 import pytest
 from freezegun import freeze_time
 
+from database_tools.storage import Bucket
+
 from scrape_artists import main
 
 
@@ -21,23 +23,6 @@ class FakeMediaProvider:
                 popularity=0.0
             )
         ]
-
-
-class FakeStorage:
-
-    def __init__(self):
-        self._storage = boto3.client(
-            service_name="s3",
-            endpoint_url=os.environ["INFRA_ENDPOINT_URL"]
-        )
-
-    def get(self, file: str) -> Dict:
-        item = self._storage.get_object(
-            Bucket=os.environ["BUCKET_NAME"],
-            Key=file
-        )
-        content = item["Body"].read()
-        return json.loads(content)
 
 
 class FakeQueue:
@@ -80,8 +65,11 @@ def mock_media_provider(mocker):
 
 
 @pytest.fixture
-def storage():
-    return FakeStorage()
+def bucket():
+    return Bucket(
+        bucket_name="test-bucket",
+        endpoint_url="http://infra:4566"
+    )
 
 
 @pytest.fixture
@@ -92,7 +80,7 @@ def queue():
 @freeze_time("2023-01-01")
 def test_run_should_save_to_storage_and_publish_messages(
     mock_media_provider,
-    storage,
+    bucket,
     queue
 ):
 
@@ -103,7 +91,7 @@ def test_run_should_save_to_storage_and_publish_messages(
 
     assert output == {"status_code": 200}
     assert queue.contains({"artist": "name"})
-    assert storage.get(file="20230101_000000/0.json") == {
+    assert bucket.get_json("20230101_000000/0.json") == {
         "id": "0",
         "name": "name",
         "n_followers": 0,
