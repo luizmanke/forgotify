@@ -1,6 +1,6 @@
-# Database Tools
+# Cloud Tools
 
-Database Tools is a package that aims to ease operations to databases, such as reading and writing.
+Cloud Tools is a package that aims to ease operations to cloud services, such as message queues.
 
 ## Topics
 
