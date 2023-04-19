@@ -99,7 +99,7 @@ def _save_to_storage(
             storage.put_object(
                 Body=json.dumps(artist.dict()),
                 Bucket=bucket_name,
-                Key=f"{artist.id}_{current_time}.json"
+                Key=f"{current_time}/{artist.id}.json"
             )
         except Exception as error:
             raise SaveToStorageError(error)

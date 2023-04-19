@@ -103,7 +103,7 @@ def test_run_should_save_to_storage_and_publish_messages(
 
     assert output == {"status_code": 200}
     assert queue.contains({"artist": "name"})
-    assert storage.get(file="0_20230101_000000.json") == {
+    assert storage.get(file="20230101_000000/0.json") == {
         "id": "0",
         "name": "name",
         "n_followers": 0,
