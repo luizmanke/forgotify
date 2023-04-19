@@ -8,8 +8,13 @@ packages = [{include = "database_tools"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-psycopg2 = "^2.9.3"
-SQLAlchemy = "^1.4.41"
+
+# postgres
+psycopg2 = { version = "^2.9.3", optional = true }
+SQLAlchemy = { version = "^1.4.41", optional = true }
+
+# storage
+boto3 = { version = "^1.26.115", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"
@@ -17,6 +22,10 @@ flake8 = "^5.0.4"
 mypy = "^0.971"
 pytest = "^7.1.3"
 sqlalchemy-stubs = "^0.4"
+
+[tool.poetry.extras]
+postgres = ["psycopg2", "SQLAlchemy"]
+storage = ["boto3"]
 
 
 [build-system]

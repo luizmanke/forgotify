@@ -11,6 +11,7 @@ Currently, it supports:
 * [Running locally](#running-locally)
 * [Testing locally](#testing-locally)
 * [Cleaning the workspace](#cleaning-the-workspace)
+* [Adding this project as a dependency](#adding-this-project-as-a-dependency)
 
 ## Running locally
 
@@ -61,3 +62,15 @@ Stop containers, remove containers, and remove the docker image:
 ```sh
 make clean
 ```
+
+## Adding this project as a dependency
+
+Add the the following line to the project's `pyproject.toml`:
+
+```
+[tool.poetry.dependencies]
+...
+database-tools = { path = "../../libs/database-tools", extras = ["storage"] }
+```
+
+> *Where `extras` are the required database-tools subpackages: postgres, storage, ...*

@@ -12,9 +12,36 @@ services:
     expose:
       - 5432
 
+  storage:
+    image: localstack/localstack:2.0.1
+    expose:
+      - 4566
+
+  storage_setup:
+    image: amazon/aws-cli:2.11.12
+    entrypoint: /bin/sh -c
+    command: >
+      "
+        # Create bucket
+        aws s3api create-bucket \
+          --bucket test-bucket \
+          --endpoint-url http://storage:4566
+      "
+    environment:
+      - AWS_ACCESS_KEY_ID=fake-id
+      - AWS_SECRET_ACCESS_KEY=fake-secret
+      - AWS_DEFAULT_REGION=us-east-1
+    depends_on:
+      - storage
+
   database_tools:
     image: database-tools:latest
     environment:
-      - WAIT_HOSTS=postgres:5432
+      - AWS_ACCESS_KEY_ID=fake-id
+      - AWS_SECRET_ACCESS_KEY=fake-secret
+      - AWS_DEFAULT_REGION=us-east-1
+      - WAIT_AFTER=5
+      - WAIT_HOSTS=postgres:5432,storage:4566
     depends_on:
       - postgres
+      - storage_setup
