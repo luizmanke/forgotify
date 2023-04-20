@@ -1,7 +1,7 @@
 from infra import (  # noqa
     buckets,
     functions,
+    queues,
     roles,
-    topics,
     triggers
 )
