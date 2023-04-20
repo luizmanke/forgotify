@@ -18,7 +18,8 @@ all: build lint test
 build:
 	make docker-build CD=../
 
-lint: lint-flake8 lint-mypy lint-bandit
+# lint-mypy not used since it's slow and not required in this project
+lint: lint-flake8 lint-bandit
 
 test: pytest-unit
 
