@@ -10,6 +10,8 @@ from database_tools.storage import Bucket
 from media_tools.schemas import Artist
 from media_tools.search import Provider
 
+from scrape_artists import exceptions
+
 
 def run(event: Dict, context: Any):
 
@@ -24,13 +26,13 @@ def run(event: Dict, context: Any):
     _save_to_storage(
         artists,
         bucket_name=os.environ["BUCKET_NAME"],
-        infra_endpoint_url=os.environ.get("INFRA_ENDPOINT_URL")
+        endpoint_url=os.environ.get("INFRA_ENDPOINT_URL")
     )
 
-    _publish_to_topic(
+    _add_to_queue(
         artists,
-        queue_topic_arn=os.environ["QUEUE_TOPIC_ARN"],
-        infra_endpoint_url=os.environ.get("INFRA_ENDPOINT_URL")
+        queue_name=os.environ["QUEUE_NAME"],
+        endpoint_url=os.environ.get("INFRA_ENDPOINT_URL")
     )
 
     return {
@@ -43,28 +45,29 @@ def _check_inputs(event: Dict):
     bucket_name = os.environ.get("BUCKET_NAME")
     media_client_id = os.environ.get("MEDIA_CLIENT_ID")
     media_client_secret = os.environ.get("MEDIA_CLIENT_SECRET")
-    queue_topic_arn = os.environ.get("QUEUE_TOPIC_ARN")
+    queue_name = os.environ.get("QUEUE_NAME")
     query = event.get("query")
 
     if not bucket_name:
-        raise MissingEnvVar("The 'BUCKET_NAME' environment variable is missing")
+        raise exceptions.MissingEnvVar("The 'BUCKET_NAME' environment variable is missing")
 
     if not media_client_id:
-        raise MissingEnvVar("The 'MEDIA_CLIENT_ID' environment variable is missing")
+        raise exceptions.MissingEnvVar("The 'MEDIA_CLIENT_ID' environment variable is missing")
 
     if not media_client_secret:
-        raise MissingEnvVar("The 'MEDIA_CLIENT_SECRET' environment variable is missing")
+        raise exceptions.MissingEnvVar("The 'MEDIA_CLIENT_SECRET' environment variable is missing")
 
-    if not queue_topic_arn:
-        raise MissingEnvVar("The 'QUEUE_TOPIC_ARN' environment variable is missing")
+    if not queue_name:
+        raise exceptions.MissingEnvVar("The 'QUEUE_NAME' environment variable is missing")
 
     if not query:
-        raise MissingEventKey("The 'event' argument is missing the 'query' key")
+        raise exceptions.MissingEventKey("The 'event' argument is missing the 'query' key")
 
     if not isinstance(query, str):
-        raise InvalidKeyType("The 'event' key 'query' must be of type 'str'")
+        raise exceptions.InvalidKeyType("The 'event' key 'query' must be of type 'str'")
 
 
+@exceptions.raise_on_failure(exceptions.GetArtistsError)
 def _get_artists(
     query: str,
     media_client_id: str,
@@ -82,40 +85,41 @@ def _get_artists(
     return artists
 
 
+@exceptions.raise_on_failure(exceptions.SaveToStorageError)
 def _save_to_storage(
     artists: List[Artist],
     bucket_name: str,
-    infra_endpoint_url: Optional[str]
+    endpoint_url: Optional[str] = None
 ):
     current_time = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
 
     bucket = Bucket(
         bucket_name,
-        infra_endpoint_url
+        endpoint_url
     )
 
     for artist in artists:
-        try:
-            bucket.put_json(
-                data=artist.dict(),
-                file_path=f"{current_time}/{artist.id}.json"
-            )
-        except Exception as error:
-            raise SaveToStorageError(error)
+        bucket.put_json(
+            data=artist.dict(),
+            file_path=f"{current_time}/{artist.id}.json"
+        )
 
     logger.info(f"Artists saved to bucket '{bucket_name}'")
 
 
-def _publish_to_topic(
+@exceptions.raise_on_failure(exceptions.AddToQueueError)
+def _add_to_queue(
     artists: List[Artist],
-    queue_topic_arn: str,
-    infra_endpoint_url: Optional[str]
+    queue_name: str,
+    endpoint_url: Optional[str] = None
 ):
 
     queue = boto3.client(
-        service_name="sns",
-        endpoint_url=infra_endpoint_url
+        service_name="sqs",
+        endpoint_url=endpoint_url
     )
+
+    queue_url = queue.get_queue_url(QueueName=queue_name)["QueueUrl"]
 
     for artist in artists:
 
@@ -123,32 +127,9 @@ def _publish_to_topic(
             "artist": artist.name
         })
 
-        try:
-            queue.publish(
-                TopicArn=queue_topic_arn,
-                Message=message,
-            )
-        except Exception as error:
-            raise PublishMessageError(error)
+        queue.send_message(
+            QueueUrl=queue_url,
+            MessageBody=message,
+        )
 
-    logger.info(f"Messages published to topic '{queue_topic_arn}'")
-
-
-class InvalidKeyType(Exception):
-    pass
-
-
-class MissingEventKey(Exception):
-    pass
-
-
-class MissingEnvVar(Exception):
-    pass
-
-
-class SaveToStorageError(Exception):
-    pass
-
-
-class PublishMessageError(Exception):
-    pass
+    logger.info(f"Messages added to queue '{queue_name}'")

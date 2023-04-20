@@ -5,8 +5,8 @@ import pulumi_aws as aws
 
 from infra import (
     buckets,
-    roles,
-    topics
+    queues,
+    roles
 )
 
 
@@ -23,7 +23,7 @@ scrape_trigger_function = aws.lambda_.Function(
     resource_name="scrape-trigger",
     environment={
         "variables": {
-            "QUEUE_TOPIC_ARN": topics.query_triggered_topic.arn
+            "QUEUE_NAME": queues.query_triggered_queue.name
         },
     },
     image_uri=f"{account_id}.dkr.ecr.{region}.amazonaws.com/scrape-trigger:{image_tag}",
@@ -40,7 +40,7 @@ scrape_artists_function = aws.lambda_.Function(
             "BUCKET_NAME": buckets.artists_bucket.bucket,
             "MEDIA_CLIENT_ID": media_client_id,
             "MEDIA_CLIENT_SECRET": media_client_secret,
-            "QUEUE_TOPIC_ARN": topics.query_triggered_topic.arn
+            "QUEUE_NAME": queues.artist_updated_queue.name
         },
     },
     image_uri=f"{account_id}.dkr.ecr.{region}.amazonaws.com/scrape-artists:{image_tag}",
@@ -50,9 +50,8 @@ scrape_artists_function = aws.lambda_.Function(
     timeout=300
 )
 
-aws.sns.TopicSubscription(
+aws.lambda_.EventSourceMapping(
     resource_name="query-triggered-scrape-artist",
-    topic=topics.query_triggered_topic.arn,
-    protocol="lambda",
-    endpoint=scrape_artists_function.arn
+    event_source_arn=queues.query_triggered_queue.arn,
+    function_name=scrape_artists_function.arn
 )

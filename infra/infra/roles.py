@@ -63,14 +63,19 @@ logs_create_policy = aws.iam.Policy(
     })
 )
 
-sns_publish_policy = aws.iam.Policy(
-    resource_name="sns-publish",
-    name=f"sns-publish-{environment}",
+sqs_read_write_policy = aws.iam.Policy(
+    resource_name="sqs-read-write-publish",
+    name=f"sqs-read-write-{environment}",
     policy=json.dumps({
         "Version": "2012-10-17",
         "Statement": [
             {
-                "Action": "sns:Publish",
+                "Action": [
+                    "sqs:DeleteMessage",
+                    "sqs:GetQueueAttributes",
+                    "sqs:ReceiveMessage",
+                    "sqs:SendMessage",
+                ],
                 "Effect": "Allow",
                 "Resource": "*"
             }
@@ -100,9 +105,9 @@ aws.iam.RolePolicyAttachment(
 )
 
 aws.iam.RolePolicyAttachment(
-    resource_name="scrape-trigger-sns-publish",
+    resource_name="scrape-trigger-sqs-read-write",
     role=scrape_trigger_role.name,
-    policy_arn=sns_publish_policy.arn
+    policy_arn=sqs_read_write_policy.arn
 )
 
 aws.iam.RolePolicyAttachment(
@@ -118,7 +123,7 @@ aws.iam.RolePolicyAttachment(
 )
 
 aws.iam.RolePolicyAttachment(
-    resource_name="scrape-artists-sns-publish",
+    resource_name="scrape-artists-sqs-read-write",
     role=scrape_artists_role.name,
-    policy_arn=sns_publish_policy.arn
+    policy_arn=sqs_read_write_policy.arn
 )
