@@ -14,9 +14,9 @@ image_tag = os.environ["AWS_IMAGE_TAG"]
 config = pulumi.Config()
 environment = config.require("environment")
 
-#########
-# ROLES #
-#########
+########
+# ROLE #
+########
 
 lambda_role = aws.iam.Role(
     resource_name="scrape-trigger-role",

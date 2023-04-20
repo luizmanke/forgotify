@@ -19,9 +19,9 @@ environment = config.require("environment")
 media_client_id = config.require_secret("media_client_id")
 media_client_secret = config.require_secret("media_client_secret")
 
-#########
-# ROLES #
-#########
+########
+# ROLE #
+########
 
 lambda_role = aws.iam.Role(
     resource_name="scrape-artists-role",
