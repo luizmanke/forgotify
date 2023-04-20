@@ -5,13 +5,26 @@ from cloud_tools.queue import Queue
 
 @pytest.fixture
 def queue():
-    return Queue()
+    return Queue(
+        queue_name="test-queue",
+        endpoint_url="http://infra:4566"
+    )
 
 
-def test_publish_should_add_message_to_queue(queue):
+def test_add_json_should_add_json_message_to_queue(queue):
 
     message = {"a": 1}
 
-    queue.publish(message)
+    queue.add_json(message)
 
-    assert message in queue.list()
+    assert queue.get_json() == {"a": 1}
+
+
+def test_get_json_should_get_json_message_from_queue(queue):
+
+    message = {"a": 1}
+    queue.add_json(message)
+
+    output = queue.get_json()
+
+    assert output == {"a": 1}
