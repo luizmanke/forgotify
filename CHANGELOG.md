@@ -17,6 +17,7 @@
 
 ### Refactor
 
+- Change infra project structure (#79)
 - Replace SNS with SQS (#77)
 - Create storage tool (#76)
 - Scrape trigger (#73)
