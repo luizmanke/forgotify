@@ -3,8 +3,15 @@
 _list_package_dependencies_recursively() {
     package_path="$1"
 
+    REMOVE_QUOTES='s#"##g'
+    REMOVE_PREVIOUS_DIRS='s#\.\./##g'
+    REMOVE_AFTER_COMMA='s#,.*##g'
+
     relative_dependencies_path=$(grep -o '"\.\./.*"' "$package_path"/pyproject.toml)
-    absolute_dependencies_path=$(echo "$relative_dependencies_path" | sed -e 's#"##g' -e 's#\.\./##g')
+    absolute_dependencies_path=$(
+        echo "$relative_dependencies_path" | 
+        sed -e $REMOVE_QUOTES -e $REMOVE_PREVIOUS_DIRS -e $REMOVE_AFTER_COMMA
+    )
 
     echo "$absolute_dependencies_path"
 
