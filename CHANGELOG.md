@@ -17,6 +17,7 @@
 
 ### Refactor
 
+- Replace SNS with SQS (#77)
 - Create storage tool (#76)
 - Scrape trigger (#73)
 
