@@ -30,6 +30,11 @@ jobs:
     with:
       package_path: projects/scrape-artists
 
+  projects_scrape_tracks:
+    uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
+    with:
+      package_path: projects/scrape-tracks
+
   projects_scrape_trigger:
     uses: luizmanke/forgotify/.github/workflows/continuous-integration-base.yml@main
     with:
