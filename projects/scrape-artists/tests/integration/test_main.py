@@ -1,11 +1,9 @@
-import json
-import os
-from typing import Dict, List
+from typing import List
 
-import boto3
 import pytest
 from freezegun import freeze_time
 
+from cloud_tools.messenger import Queue
 from database_tools.storage import Bucket
 
 from scrape_artists import main
@@ -23,36 +21,6 @@ class FakeMediaProvider:
                 popularity=0.0
             )
         ]
-
-
-class FakeQueue:
-
-    def __init__(self):
-
-        self._sqs = boto3.client(
-            service_name="sqs",
-            endpoint_url=os.environ["INFRA_ENDPOINT_URL"]
-        )
-
-        self._queue = self._sqs.get_queue_url(QueueName="test-queue")
-
-    def contains(self, message: Dict) -> bool:
-        return message in self.messages
-
-    @property
-    def messages(self) -> List:
-
-        response = self._sqs.receive_message(
-            QueueUrl=self._queue["QueueUrl"],
-            MaxNumberOfMessages=10
-        )
-
-        messages = []
-        for item in response["Messages"]:
-            body = json.loads(item["Body"])
-            messages.append(body)
-
-        return messages
 
 
 @pytest.fixture
@@ -73,7 +41,10 @@ def bucket():
 
 @pytest.fixture
 def queue():
-    return FakeQueue()
+    return Queue(
+        queue_name="test-queue",
+        endpoint_url="http://infra:4566"
+    )
 
 
 @freeze_time("2023-01-01")
@@ -89,7 +60,7 @@ def test_run_should_save_to_storage_and_add_to_queue(
     output = main.run(event, context)
 
     assert output == {"status_code": 200}
-    assert queue.contains({"artist": "name"})
+    assert queue.get_json() == {"artist": "name"}
     assert bucket.get_json("20230101_000000/0.json") == {
         "id": "0",
         "name": "name",
@@ -104,7 +75,7 @@ def test_run_should_raise_if_event_does_not_contain_search_key():
     event = {}
     context = {}
 
-    with pytest.raises(main.exceptions.MissingEventKey):
+    with pytest.raises(main.MissingEventKey):
         main.run(event, context)
 
 
@@ -113,7 +84,7 @@ def test_run_should_raise_if_event_search_key_is_not_string():
     event = {"query": ["A"]}
     context = {}
 
-    with pytest.raises(main.exceptions.InvalidKeyType):
+    with pytest.raises(main.InvalidKeyType):
         main.run(event, context)
 
 
@@ -133,42 +104,5 @@ def test_run_should_raise_if_environment_variable_is_missing(monkeypatch, env_va
     event = {"query": "A"}
     context = {}
 
-    with pytest.raises(main.exceptions.MissingEnvVar):
-        main.run(event, context)
-
-
-def test_run_should_raise_if_get_artists_fails():
-
-    event = {"query": "A"}
-    context = {}
-
-    with pytest.raises(main.exceptions.GetArtistsError):
-        main.run(event, context)
-
-
-def test_run_should_raise_if_save_to_storage_fails(
-    mock_media_provider,
-    monkeypatch
-):
-
-    monkeypatch.setenv("BUCKET_NAME", "wrong-bucket-name")
-
-    event = {"query": "A"}
-    context = {}
-
-    with pytest.raises(main.exceptions.SaveToStorageError):
-        main.run(event, context)
-
-
-def test_run_should_raise_if_add_to_queue_fails(
-    mock_media_provider,
-    monkeypatch
-):
-
-    monkeypatch.setenv("QUEUE_NAME", "wrong-queue-name")
-
-    event = {"query": "A"}
-    context = {}
-
-    with pytest.raises(main.exceptions.AddToQueueError):
+    with pytest.raises(main.MissingEnvVar):
         main.run(event, context)

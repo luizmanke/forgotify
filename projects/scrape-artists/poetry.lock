@@ -82,18 +82,18 @@ yaml = ["PyYAML"]
 
 [[package]]
 name = "boto3"
-version = "1.26.115"
+version = "1.26.118"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.26.115-py3-none-any.whl", hash = "sha256:deb53ad15ff0e75ae0be6d7115a2d34e4bafb0541484485f0feb61dabdfb5513"},
-    {file = "boto3-1.26.115.tar.gz", hash = "sha256:2272a060005bf8299f7342cbf1344304eb44b7060cddba6784f676e3bc737bb8"},
+    {file = "boto3-1.26.118-py3-none-any.whl", hash = "sha256:1ff703152553f4d5fc9774071d114dbf06ec661eb1b29b6051f6b1f9d0c24873"},
+    {file = "boto3-1.26.118.tar.gz", hash = "sha256:d0ed43228952b55c9f44d1c733f74656418c39c55dbe36bc37feeef6aa583ded"},
 ]
 
 [package.dependencies]
-botocore = ">=1.29.115,<1.30.0"
+botocore = ">=1.29.118,<1.30.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -102,14 +102,14 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.29.115"
+version = "1.29.118"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.29.115-py3-none-any.whl", hash = "sha256:dff327977d7c9f98f2dc54b51b8f70326952dd50ae23b885fdfa8bfeec014b76"},
-    {file = "botocore-1.29.115.tar.gz", hash = "sha256:58eee8cf8f4f3e515df29f6dc535dd86ed3f4cea40999c5bc74640ff40bdc71f"},
+    {file = "botocore-1.29.118-py3-none-any.whl", hash = "sha256:44cb088a73b02dd716c5c5715143a64d5f10388957285246e11f3cc893eebf9d"},
+    {file = "botocore-1.29.118.tar.gz", hash = "sha256:b51fc5d50cbc43edaf58b3ec4fa933b82755801c453bf8908c8d3e70ae1142c1"},
 ]
 
 [package.dependencies]
@@ -216,6 +216,26 @@ files = [
     {file = "charset_normalizer-3.1.0-cp39-cp39-win_amd64.whl", hash = "sha256:830d2948a5ec37c386d3170c483063798d7879037492540f10a475e3fd6f244b"},
     {file = "charset_normalizer-3.1.0-py3-none-any.whl", hash = "sha256:3d9098b479e78c85080c98e1e35ff40b4a31d8953102bb0fd7d1b6f8a2111a3d"},
 ]
+
+[[package]]
+name = "cloud-tools"
+version = "0.1.0"
+description = ""
+category = "main"
+optional = false
+python-versions = "^3.9"
+files = []
+develop = false
+
+[package.dependencies]
+boto3 = {version = "^1.26.117", optional = true}
+
+[package.extras]
+messenger = ["boto3 (>=1.26.117,<2.0.0)"]
+
+[package.source]
+type = "directory"
+url = "../../libs/cloud-tools"
 
 [[package]]
 name = "colorama"
@@ -998,4 +1018,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "c287aa969101ef5fde55f12f10a90a8cb04579f7e1ea5011f6a61a121be31e88"
+content-hash = "f12c4832e2fdbebb3623b6b754bb5bad526bb5bbed00df2a61c10080b4238502"

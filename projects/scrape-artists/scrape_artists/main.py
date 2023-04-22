@@ -1,16 +1,13 @@
-import json
 import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-import boto3
 from loguru import logger
 
+from cloud_tools.messenger import Queue
 from database_tools.storage import Bucket
 from media_tools.schemas import Artist
 from media_tools.search import Provider
-
-from scrape_artists import exceptions
 
 
 def run(event: Dict, context: Any):
@@ -49,25 +46,24 @@ def _check_inputs(event: Dict):
     query = event.get("query")
 
     if not bucket_name:
-        raise exceptions.MissingEnvVar("The 'BUCKET_NAME' environment variable is missing")
+        raise MissingEnvVar("The 'BUCKET_NAME' environment variable is missing")
 
     if not media_client_id:
-        raise exceptions.MissingEnvVar("The 'MEDIA_CLIENT_ID' environment variable is missing")
+        raise MissingEnvVar("The 'MEDIA_CLIENT_ID' environment variable is missing")
 
     if not media_client_secret:
-        raise exceptions.MissingEnvVar("The 'MEDIA_CLIENT_SECRET' environment variable is missing")
+        raise MissingEnvVar("The 'MEDIA_CLIENT_SECRET' environment variable is missing")
 
     if not queue_name:
-        raise exceptions.MissingEnvVar("The 'QUEUE_NAME' environment variable is missing")
+        raise MissingEnvVar("The 'QUEUE_NAME' environment variable is missing")
 
     if not query:
-        raise exceptions.MissingEventKey("The 'event' argument is missing the 'query' key")
+        raise MissingEventKey("The 'event' argument is missing the 'query' key")
 
     if not isinstance(query, str):
-        raise exceptions.InvalidKeyType("The 'event' key 'query' must be of type 'str'")
+        raise InvalidKeyType("The 'event' key 'query' must be of type 'str'")
 
 
-@exceptions.raise_on_failure(exceptions.GetArtistsError)
 def _get_artists(
     query: str,
     media_client_id: str,
@@ -85,7 +81,6 @@ def _get_artists(
     return artists
 
 
-@exceptions.raise_on_failure(exceptions.SaveToStorageError)
 def _save_to_storage(
     artists: List[Artist],
     bucket_name: str,
@@ -107,29 +102,30 @@ def _save_to_storage(
     logger.info(f"Artists saved to bucket '{bucket_name}'")
 
 
-@exceptions.raise_on_failure(exceptions.AddToQueueError)
 def _add_to_queue(
     artists: List[Artist],
     queue_name: str,
     endpoint_url: Optional[str] = None
 ):
-
-    queue = boto3.client(
-        service_name="sqs",
-        endpoint_url=endpoint_url
+    queue = Queue(
+        queue_name,
+        endpoint_url
     )
 
-    queue_url = queue.get_queue_url(QueueName=queue_name)["QueueUrl"]
-
     for artist in artists:
-
-        message = json.dumps({
-            "artist": artist.name
-        })
-
-        queue.send_message(
-            QueueUrl=queue_url,
-            MessageBody=message,
-        )
+        message = {"artist": artist.name}
+        queue.add_json(message)
 
     logger.info(f"Messages added to queue '{queue_name}'")
+
+
+class InvalidKeyType(Exception):
+    pass
+
+
+class MissingEventKey(Exception):
+    pass
+
+
+class MissingEnvVar(Exception):
+    pass
