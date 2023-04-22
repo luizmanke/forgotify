@@ -97,6 +97,7 @@ sqs_policy = aws.iam.Policy(
                 "Action": [
                     "sqs:DeleteMessage",
                     "sqs:GetQueueAttributes",
+                    "sqs:GetQueueUrl",
                     "sqs:ReceiveMessage",
                     "sqs:SendMessage"
                 ],
