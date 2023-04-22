@@ -12,10 +12,10 @@ services:
     entrypoint: /bin/sh -c
     command: >
       "
-        # Create SQS queue
-        aws sqs create-queue \
-          --queue-name test-queue \
-          --endpoint-url=http://infra:4566
+        # Create bucket
+        aws s3api create-bucket \
+          --bucket test-bucket \
+          --endpoint-url http://infra:4566
       "
     environment:
       - AWS_ACCESS_KEY_ID=fake-id
@@ -24,14 +24,16 @@ services:
     depends_on:
       - infra
 
-  scrape_trigger:
-    image: scrape-trigger:latest
+  scrape_tracks:
+    image: scrape-tracks:latest
     environment:
       - AWS_ACCESS_KEY_ID=fake-id
       - AWS_SECRET_ACCESS_KEY=fake-secret
       - AWS_DEFAULT_REGION=us-east-1
+      - BUCKET_NAME=test-bucket
       - INFRA_ENDPOINT_URL=http://infra:4566
-      - QUEUE_NAME=test-queue
+      - MEDIA_CLIENT_ID=fake-id
+      - MEDIA_CLIENT_SECRET=fake-secret
       - WAIT_AFTER=5
       - WAIT_HOSTS=infra:4566
     depends_on:

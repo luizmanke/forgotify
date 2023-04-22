@@ -30,7 +30,7 @@ services:
       - AWS_ACCESS_KEY_ID=fake-id
       - AWS_SECRET_ACCESS_KEY=fake-secret
       - AWS_DEFAULT_REGION=us-east-1
-      - WAIT_AFTER=5  # wait until setup service is finished
+      - WAIT_AFTER=5
       - WAIT_HOSTS=infra:4566
     depends_on:
       - setup

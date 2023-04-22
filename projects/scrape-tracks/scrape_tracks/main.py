@@ -5,9 +5,8 @@ from typing import Any, Dict, List, Optional
 
 from loguru import logger
 
-from cloud_tools.messenger import Queue
 from database_tools.storage import Bucket
-from media_tools.schemas import Artist
+from media_tools.schemas import Track
 from media_tools.search import Provider
 
 
@@ -29,21 +28,15 @@ def _run(event: Dict):
 
     _check_inputs(event)
 
-    artists = _get_artists(
-        query=event["query"],
+    tracks = _get_tracks(
+        artist=event["artist"],
         media_client_id=os.environ["MEDIA_CLIENT_ID"],
         media_client_secret=os.environ["MEDIA_CLIENT_SECRET"]
     )
 
     _save_to_storage(
-        artists,
+        tracks,
         bucket_name=os.environ["BUCKET_NAME"],
-        endpoint_url=os.environ.get("INFRA_ENDPOINT_URL")
-    )
-
-    _add_to_queue(
-        artists,
-        queue_name=os.environ["QUEUE_NAME"],
         endpoint_url=os.environ.get("INFRA_ENDPOINT_URL")
     )
 
@@ -53,8 +46,7 @@ def _check_inputs(event: Dict):
     bucket_name = os.environ.get("BUCKET_NAME")
     media_client_id = os.environ.get("MEDIA_CLIENT_ID")
     media_client_secret = os.environ.get("MEDIA_CLIENT_SECRET")
-    queue_name = os.environ.get("QUEUE_NAME")
-    query = event.get("query")
+    artist = event.get("artist")
 
     if not bucket_name:
         raise MissingEnvVar("The 'BUCKET_NAME' environment variable is missing")
@@ -65,35 +57,32 @@ def _check_inputs(event: Dict):
     if not media_client_secret:
         raise MissingEnvVar("The 'MEDIA_CLIENT_SECRET' environment variable is missing")
 
-    if not queue_name:
-        raise MissingEnvVar("The 'QUEUE_NAME' environment variable is missing")
+    if not artist:
+        raise MissingEventKey("The 'event' argument is missing the 'artist' key")
 
-    if not query:
-        raise MissingEventKey("The 'event' argument is missing the 'query' key")
-
-    if not isinstance(query, str):
-        raise InvalidKeyType("The 'event' key 'query' must be of type 'str'")
+    if not isinstance(artist, str):
+        raise InvalidKeyType("The 'event' key 'artist' must be of type 'str'")
 
 
-def _get_artists(
-    query: str,
+def _get_tracks(
+    artist: str,
     media_client_id: str,
     media_client_secret: str
-) -> List[Artist]:
+) -> List[Track]:
 
     media_provider = Provider(
         media_client_id,
         media_client_secret
     )
 
-    artists = media_provider.get_artists(query)
-    logger.info(f"Query '{query}' returned {len(artists)} artists")
+    tracks = media_provider.get_tracks(artist)
+    logger.info(f"Artist '{artist}' returned {len(tracks)} tracks")
 
-    return artists
+    return tracks
 
 
 def _save_to_storage(
-    artists: List[Artist],
+    tracks: List[Track],
     bucket_name: str,
     endpoint_url: Optional[str] = None
 ):
@@ -106,30 +95,13 @@ def _save_to_storage(
         endpoint_url
     )
 
-    for artist in artists:
+    for track in tracks:
         bucket.put_json(
-            data=artist.dict(),
-            file_path=f"{prefix}/{artist.id}_{suffix}.json"
+            data=track.dict(),
+            file_path=f"{prefix}/{track.id}_{suffix}.json"
         )
 
-    logger.info(f"Artists saved to bucket '{bucket_name}'")
-
-
-def _add_to_queue(
-    artists: List[Artist],
-    queue_name: str,
-    endpoint_url: Optional[str] = None
-):
-    queue = Queue(
-        queue_name,
-        endpoint_url
-    )
-
-    for artist in artists:
-        message = {"artist": artist.name}
-        queue.add_json(message)
-
-    logger.info(f"Messages added to queue '{queue_name}'")
+    logger.info(f"Tracks saved to bucket '{bucket_name}'")
 
 
 class InvalidKeyType(Exception):

@@ -7,6 +7,12 @@ environment = config.require("environment")
 
 artists = aws.s3.Bucket(
     resource_name="artists",
-    bucket=f"artists-{environment}",
+    bucket=f"forgotify-artists-{environment}",
+    acl="private"
+)
+
+tracks = aws.s3.Bucket(
+    resource_name="tracks",
+    bucket=f"forgotify-tracks-{environment}",
     acl="private"
 )

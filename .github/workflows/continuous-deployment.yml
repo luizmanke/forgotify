@@ -33,6 +33,7 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
           make -C projects/scrape-artists push TAG=${GITHUB_REF_NAME}
+          make -C projects/scrape-tracks push TAG=${GITHUB_REF_NAME}
           make -C projects/scrape-trigger push TAG=${GITHUB_REF_NAME}
 
   update_infra:
