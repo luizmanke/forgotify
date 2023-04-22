@@ -1,3 +1,4 @@
+import json
 import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional
@@ -10,7 +11,21 @@ from media_tools.schemas import Artist
 from media_tools.search import Provider
 
 
-def run(event: Dict, context: Any):
+def run(event: Dict, context: Any) -> Dict:
+
+    if "Records" not in event:
+        raise MissingEventKey("The 'event' argument is missing the 'Records' key")
+
+    for record in event["Records"]:
+        event = json.loads(record["body"])
+        _run(event)
+
+    return {
+        "status_code": 200
+    }
+
+
+def _run(event: Dict):
 
     _check_inputs(event)
 
@@ -31,10 +46,6 @@ def run(event: Dict, context: Any):
         queue_name=os.environ["QUEUE_NAME"],
         endpoint_url=os.environ.get("INFRA_ENDPOINT_URL")
     )
-
-    return {
-        "status_code": 200
-    }
 
 
 def _check_inputs(event: Dict):

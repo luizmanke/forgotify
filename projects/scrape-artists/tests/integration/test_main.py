@@ -53,8 +53,13 @@ def test_run_should_save_to_storage_and_add_to_queue(
     bucket,
     queue
 ):
-
-    event = {"query": "A"}
+    event = {
+        "Records": [
+            {
+                "body": '{"query": "A"}'
+            }
+        ]
+    }
     context = {}
 
     output = main.run(event, context)
@@ -70,7 +75,7 @@ def test_run_should_save_to_storage_and_add_to_queue(
     }
 
 
-def test_run_should_raise_if_event_does_not_contain_search_key():
+def test_run_should_raise_if_event_does_not_contain_records_key():
 
     event = {}
     context = {}
@@ -79,9 +84,30 @@ def test_run_should_raise_if_event_does_not_contain_search_key():
         main.run(event, context)
 
 
-def test_run_should_raise_if_event_search_key_is_not_string():
+def test_run_should_raise_if_event_does_not_contain_query_key():
 
-    event = {"query": ["A"]}
+    event = {
+        "Records": [
+            {
+                "body": '{}'
+            }
+        ]
+    }
+    context = {}
+
+    with pytest.raises(main.MissingEventKey):
+        main.run(event, context)
+
+
+def test_run_should_raise_if_query_key_is_not_string():
+
+    event = {
+        "Records": [
+            {
+                "body": '{"query": ["A"]}'
+            }
+        ]
+    }
     context = {}
 
     with pytest.raises(main.InvalidKeyType):
@@ -101,7 +127,13 @@ def test_run_should_raise_if_environment_variable_is_missing(monkeypatch, env_va
 
     monkeypatch.delenv(env_var)
 
-    event = {"query": "A"}
+    event = {
+        "Records": [
+            {
+                "body": '{"query": "A"}'
+            }
+        ]
+    }
     context = {}
 
     with pytest.raises(main.MissingEnvVar):
