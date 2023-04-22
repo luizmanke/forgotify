@@ -2,6 +2,7 @@
 
 ### Feat
 
+- Create scrape tracks project (#82)
 - Create scrape artists function (#75)
 - Create cron job for the scrape trigger function (#71)
 - Publish trigger messages to topic (#70)
