@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+
+  infra:
+    image: localstack/localstack:2.0.1
+    expose:
+      - 4566
+
+  setup:
+    image: amazon/aws-cli:2.11.12
+    entrypoint: /bin/sh -c
+    command: >
+      "
+        # Create SQS queue
+        aws sqs create-queue \
+          --queue-name test-queue \
+          --endpoint-url=http://infra:4566
+      "
+    environment:
+      - AWS_ACCESS_KEY_ID=fake-id
+      - AWS_SECRET_ACCESS_KEY=fake-secret
+      - AWS_DEFAULT_REGION=us-east-1
+    depends_on:
+      - infra
+
+  cloud_tools:
+    image: cloud-tools:latest
+    environment:
+      - AWS_ACCESS_KEY_ID=fake-id
+      - AWS_SECRET_ACCESS_KEY=fake-secret
+      - AWS_DEFAULT_REGION=us-east-1
+      - WAIT_AFTER=5  # wait until setup service is finished
+      - WAIT_HOSTS=infra:4566
+    depends_on:
+      - setup

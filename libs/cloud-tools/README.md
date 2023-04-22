@@ -1,6 +1,6 @@
-# Database Tools
+# Cloud Tools
 
-Database Tools is a package that aims to ease operations to databases, such as reading and writing.
+Cloud Tools is a package that aims to ease operations to cloud services, such as message queues.
 
 ## Topics
 
@@ -11,7 +11,7 @@ Database Tools is a package that aims to ease operations to databases, such as r
 
 ## Running locally
 
-> *The project makes use of docker-compose to start local databases.*
+> *The project makes use of docker-compose to start local infrastructure.*
 
 Build the docker image:
 
@@ -66,7 +66,7 @@ Add the the following line to the project's `pyproject.toml`:
 ```
 [tool.poetry.dependencies]
 ...
-database-tools = { path = "../../libs/database-tools", extras = ["storage"] }
+cloud-tools = { path = "../../libs/cloud-tools", extras = ["messenger"] }
 ```
 
-> *Where `extras` are the required database-tools subpackages: postgres, storage, ...*
+> *Where `extras` are the required cloud-tools subpackages: messenger, ...*
