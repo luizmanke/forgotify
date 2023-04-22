@@ -13,6 +13,7 @@
 
 ### Fix
 
+- Functions flow (#81)
 - Search result with NoneType items (#51)
 
 ### Refactor
