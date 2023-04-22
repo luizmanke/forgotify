@@ -7,14 +7,19 @@ readme = "README.md"
 packages = [{include = "cloud_tools"}]
 
 [tool.poetry.dependencies]
-boto3 = "^1.26.117"
 python = "^3.9"
+
+# messenger
+boto3 = { version = "^1.26.117", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"
 flake8 = "^5.0.4"
 mypy = "^0.971"
 pytest = "^7.1.3"
+
+[tool.poetry.extras]
+messenger = ["boto3"]
 
 
 [build-system]

@@ -19,9 +19,15 @@ RUN curl -Lo /usr/bin/aws-lambda-rie https://github.com/aws/aws-lambda-runtime-i
 RUN pip install poetry \
     && poetry config virtualenvs.create false
 
+# Copy local libs
+COPY libs/ /libs/
+
 # Install package dependencies
 COPY ${PROJECT_PATH}/poetry.lock ${PROJECT_PATH}/pyproject.toml ./
 RUN poetry install --no-root --no-interaction --no-ansi
+
+# Remove local libs
+RUN rm -rf /libs
 
 # Mount package
 COPY ${PROJECT_PATH}/scrape_trigger/ scrape_trigger/

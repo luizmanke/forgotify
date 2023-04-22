@@ -1,11 +1,9 @@
-import json
 import os
 from typing import Dict, List, Optional
 
-import boto3
 from loguru import logger
 
-from scrape_trigger import exceptions
+from cloud_tools.messenger import Queue
 
 
 def run(event, context):
@@ -29,38 +27,40 @@ def _check_input(event: Dict):
     queries = event.get("queries")
 
     if not queue_name:
-        raise exceptions.MissingEnvVar("The 'QUEUE_NAME' environment variable is missing")
+        raise MissingEnvVar("The 'QUEUE_NAME' environment variable is missing")
 
     if not queries:
-        raise exceptions.MissingEventKey("The 'event' argument is missing the 'queries' key")
+        raise MissingEventKey("The 'event' argument is missing the 'queries' key")
 
     if not isinstance(queries, List):
-        raise exceptions.InvalidKeyType("The 'event' key 'queries' must be of type list")
+        raise InvalidKeyType("The 'event' key 'queries' must be of type list")
 
 
-@exceptions.raise_on_failure(exceptions.AddToQueueError)
 def _add_to_queue(
     queries: List[str],
     queue_name: str,
     endpoint_url: Optional[str] = None
 ):
 
-    queue = boto3.client(
-        service_name="sqs",
-        endpoint_url=endpoint_url
+    queue = Queue(
+        queue_name,
+        endpoint_url
     )
 
-    queue_url = queue.get_queue_url(QueueName=queue_name)["QueueUrl"]
-
     for query in queries:
-
-        message = json.dumps({
-            "query": query
-        })
-
-        queue.send_message(
-            QueueUrl=queue_url,
-            MessageBody=message,
-        )
+        message = {"query": query}
+        queue.add_json(message)
 
     logger.info(f"{len(queries)} messages added to queue '{queue_name}'")
+
+
+class InvalidKeyType(Exception):
+    pass
+
+
+class MissingEnvVar(Exception):
+    pass
+
+
+class MissingEventKey(Exception):
+    pass

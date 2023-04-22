@@ -8,9 +8,9 @@ packages = [{include = "scrape_trigger"}]
 
 [tool.poetry.dependencies]
 awslambdaric = "^2.0.4"
-boto3 = "^1.26.111"
 loguru = "^0.7.0"
 python = "^3.9"
+cloud-tools = { path = "../../libs/cloud-tools", extras = ["messenger"] }
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"

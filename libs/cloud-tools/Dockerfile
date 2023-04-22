@@ -17,7 +17,7 @@ RUN pip install poetry \
 
 # Install package dependencies
 COPY ${PROJECT_PATH}/poetry.lock ${PROJECT_PATH}/pyproject.toml ./
-RUN poetry install --no-root --no-interaction --no-ansi
+RUN poetry install --no-root --no-interaction --no-ansi --all-extras
 
 # Mount package
 COPY ${PROJECT_PATH}/cloud_tools/ cloud_tools/
