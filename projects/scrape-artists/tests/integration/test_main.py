@@ -66,7 +66,7 @@ def test_run_should_save_to_storage_and_add_to_queue(
 
     assert output == {"status_code": 200}
     assert queue.get_json() == {"artist": "name"}
-    assert bucket.get_json("20230101_000000/0.json") == {
+    assert bucket.get_json("2023/01/01/0_20230101_000000.json") == {
         "id": "0",
         "name": "name",
         "n_followers": 0,

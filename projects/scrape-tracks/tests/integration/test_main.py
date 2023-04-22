@@ -54,7 +54,7 @@ def test_run_should_save_to_storage(
     output = main.run(event, context)
 
     assert output == {"status_code": 200}
-    assert bucket.get_json("20230101_000000/0.json") == {
+    assert bucket.get_json("2023/01/01/0_20230101_000000.json") == {
         "id": "0",
         "name": "name",
         "popularity": 0.0,

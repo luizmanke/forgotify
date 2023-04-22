@@ -97,7 +97,9 @@ def _save_to_storage(
     bucket_name: str,
     endpoint_url: Optional[str] = None
 ):
-    current_time = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    current_time = datetime.utcnow()
+    prefix = current_time.strftime("%Y/%m/%d")
+    suffix = current_time.strftime("%Y%m%d_%H%M%S")
 
     bucket = Bucket(
         bucket_name,
@@ -107,7 +109,7 @@ def _save_to_storage(
     for artist in artists:
         bucket.put_json(
             data=artist.dict(),
-            file_path=f"{current_time}/{artist.id}.json"
+            file_path=f"{prefix}/{artist.id}_{suffix}.json"
         )
 
     logger.info(f"Artists saved to bucket '{bucket_name}'")
