@@ -6,7 +6,7 @@ from loguru import logger
 from cloud_tools.messenger import Queue
 
 
-def run(event, context):
+def run(event, context) -> Dict:
 
     _check_input(event)
 

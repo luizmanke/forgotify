@@ -24,7 +24,7 @@ def test_run_should_add_to_queue(queue):
     assert queue.get_json() == {"query": "A"}
 
 
-def test_run_should_raise_if_event_does_not_contain_search_key():
+def test_run_should_raise_if_event_does_not_contain_queries_key():
 
     event = {}
     context = {}
@@ -33,7 +33,7 @@ def test_run_should_raise_if_event_does_not_contain_search_key():
         main.run(event, context)
 
 
-def test_run_should_raise_if_event_search_key_is_not_list():
+def test_run_should_raise_if_queries_key_is_not_list():
 
     event = {"queries": "A"}
     context = {}

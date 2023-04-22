@@ -68,7 +68,10 @@ sqs_policy = aws.iam.Policy(
         "Version": "2012-10-17",
         "Statement": [
             {
-                "Action": "sqs:SendMessage",
+                "Action": [
+                    "sqs:GetQueueUrl",
+                    "sqs:SendMessage"
+                ],
                 "Effect": "Allow",
                 "Resource": "*"
             }
@@ -115,7 +118,7 @@ lambda_target = aws.cloudwatch.EventTarget(
     arn=lambda_function.arn,
     rule=event_rule.name,
     input=json.dumps({
-        "search": ["A"]
+        "queries": ["A"]
     })
 )
 
