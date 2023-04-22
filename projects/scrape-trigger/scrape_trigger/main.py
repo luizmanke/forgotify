@@ -41,7 +41,6 @@ def _add_to_queue(
     queue_name: str,
     endpoint_url: Optional[str] = None
 ):
-
     queue = Queue(
         queue_name,
         endpoint_url

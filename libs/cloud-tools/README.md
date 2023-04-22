@@ -66,7 +66,7 @@ Add the the following line to the project's `pyproject.toml`:
 ```
 [tool.poetry.dependencies]
 ...
-cloud-tools = { path = "../../libs/cloud-tools", extras = ["storage"] }
+cloud-tools = { path = "../../libs/cloud-tools", extras = ["messenger"] }
 ```
 
-> *Where `extras` are the required cloud-tools subpackages: queue, ...*
+> *Where `extras` are the required cloud-tools subpackages: messenger, ...*
