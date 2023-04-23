@@ -1,5 +1,11 @@
 ## Unreleased
 
+### Fix
+
+- Add CD dependencies (#84)
+
+## v0.2.0-rc1 (2023-04-23)
+
 ### Feat
 
 - Create scrape tracks project (#82)
