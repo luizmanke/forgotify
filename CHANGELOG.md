@@ -19,6 +19,7 @@
 
 ### Refactor
 
+- Scrape tracks files (#83)
 - Create queue tool (#80)
 - Change infra project structure (#79)
 - Replace SNS with SQS (#77)
