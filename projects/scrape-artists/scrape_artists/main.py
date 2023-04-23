@@ -126,7 +126,10 @@ def _add_to_queue(
     )
 
     for artist in artists:
-        message = {"artist": artist.name}
+        message = {
+            "artist_id": artist.id,
+            "artist_name": artist.name
+        }
         queue.add_json(message)
 
     logger.info(f"Messages added to queue '{queue_name}'")

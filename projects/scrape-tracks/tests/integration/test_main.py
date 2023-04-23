@@ -43,23 +43,21 @@ def test_run_should_save_to_storage(
     bucket
 ):
     event = {
-        "Records": [
-            {
-                "body": '{"artist": "A"}'
-            }
-        ]
+        "Records": [{
+            "body": '{"artist_id": "0", "artist_name": "A"}'
+        }]
     }
     context = {}
 
     output = main.run(event, context)
 
     assert output == {"status_code": 200}
-    assert bucket.get_json("2023/01/01/0_20230101_000000.json") == {
+    assert bucket.get_json("2023/01/01/0_20230101_000000.json") == [{
         "id": "0",
         "name": "name",
         "popularity": 0.0,
         "artists_id": ["0"]
-    }
+    }]
 
 
 def test_run_should_raise_if_event_does_not_contain_records_key():
@@ -71,14 +69,19 @@ def test_run_should_raise_if_event_does_not_contain_records_key():
         main.run(event, context)
 
 
-def test_run_should_raise_if_event_does_not_contain_artist_key():
+@pytest.mark.parametrize(
+    "body",
+    [
+        '{"artist_id": "0"}',
+        '{"artist_name": "A"}'
+    ]
+)
+def test_run_should_raise_if_event_does_not_contain_key(body):
 
     event = {
-        "Records": [
-            {
-                "body": '{}'
-            }
-        ]
+        "Records": [{
+            "body": body
+        }]
     }
     context = {}
 
@@ -86,14 +89,19 @@ def test_run_should_raise_if_event_does_not_contain_artist_key():
         main.run(event, context)
 
 
-def test_run_should_raise_if_artist_key_is_not_string():
+@pytest.mark.parametrize(
+    "body",
+    [
+        '{"artist_id": ["0"], "artist_name": "A"}',
+        '{"artist_id": "0", "artist_name": ["A"]}'
+    ]
+)
+def test_run_should_raise_if_key_is_not_string(body):
 
     event = {
-        "Records": [
-            {
-                "body": '{"artist": ["A"]}'
-            }
-        ]
+        "Records": [{
+            "body": body
+        }]
     }
     context = {}
 
@@ -114,11 +122,9 @@ def test_run_should_raise_if_environment_variable_is_missing(monkeypatch, env_va
     monkeypatch.delenv(env_var)
 
     event = {
-        "Records": [
-            {
-                "body": '{"artist": "A"}'
-            }
-        ]
+        "Records": [{
+            "body": '{"artist_id": "0", "artist_name": "A"}'
+        }]
     }
     context = {}
 
