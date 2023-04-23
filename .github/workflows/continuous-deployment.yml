@@ -39,6 +39,7 @@ jobs:
   update_infra:
     name: Update infra
     runs-on: ubuntu-latest
+    needs: [push_images]
     steps:
 
       - name: Checkout repository
