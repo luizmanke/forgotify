@@ -23,6 +23,7 @@ jobs:
       - name: Build
         run: |
           make -C projects/scrape-artists build
+          make -C projects/scrape-tracks build
           make -C projects/scrape-trigger build
 
       - name: Push
