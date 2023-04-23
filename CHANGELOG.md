@@ -2,6 +2,12 @@
 
 ### Fix
 
+- Add scrape tracks build to CD (#86)
+
+## v0.2.1-rc1 (2023-04-23)
+
+### Fix
+
 - Add CD dependencies (#84)
 
 ## v0.2.0-rc1 (2023-04-23)
